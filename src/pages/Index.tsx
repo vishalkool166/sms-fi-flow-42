@@ -1,16 +1,10 @@
 
-import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Navigate } from "react-router-dom";
 
 const Index = () => {
-  const navigate = useNavigate();
-
-  // Redirect to onboarding on first load
-  useEffect(() => {
-    navigate("/onboarding");
-  }, [navigate]);
-
-  return <div className="min-h-screen bg-background"></div>;
+  // Navigate to the home page directly instead of onboarding
+  return <Navigate to="/" replace />;
 };
 
 export default Index;

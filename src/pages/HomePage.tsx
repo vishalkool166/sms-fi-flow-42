@@ -1,31 +1,30 @@
 
 import React from 'react';
-import { Wallet, TrendingUp, TrendingDown, Bell } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, Bell, ChevronRight, BarChart3, ArrowUpRight } from 'lucide-react';
 import { useApp } from '@/context/AppContext';
 import SummaryCard from '@/components/SummaryCard';
 import TransactionItem from '@/components/TransactionItem';
 import { useNavigate } from 'react-router-dom';
 import { formatCurrency } from '@/utils/formatters';
+import { Progress } from "@/components/ui/progress";
 
 const HomePage: React.FC = () => {
   const { totalBalance, incomeTotal, expenseTotal, getRecentTransactions } = useApp();
   const transactions = getRecentTransactions(5);
   const navigate = useNavigate();
   
+  // Calculate savings ratio
+  const savingsRatio = incomeTotal > 0 ? Math.round(((incomeTotal - expenseTotal) / incomeTotal) * 100) : 0;
+  
   return (
     <div className="p-4 max-w-md mx-auto">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h1 className="text-2xl font-bold">SMS-Fi Flow</h1>
-          <p className="text-gray-500">Your financial dashboard</p>
+      <div className="bg-gradient-to-r from-primary to-blue-400 rounded-xl text-white p-5 mb-6 shadow-md">
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-sm opacity-90">Total Balance</p>
+          <div className="bg-white/20 rounded-full p-1.5">
+            <BarChart3 className="h-4 w-4" />
+          </div>
         </div>
-        <button className="p-2 rounded-full bg-gray-100">
-          <Bell className="h-5 w-5 text-gray-600" />
-        </button>
-      </div>
-      
-      <div className="bg-primary rounded-xl text-white p-5 mb-6">
-        <p className="text-sm opacity-80 mb-1">Total Balance</p>
         <h2 className="text-3xl font-bold mb-4">{formatCurrency(totalBalance)}</h2>
         <div className="grid grid-cols-2 gap-4">
           <div className="flex items-center">
@@ -49,6 +48,43 @@ const HomePage: React.FC = () => {
         </div>
       </div>
       
+      <div className="bg-white rounded-xl p-4 shadow-sm mb-6">
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="font-medium">Monthly Overview</h3>
+          <p className="text-sm text-primary">May 2025</p>
+        </div>
+        
+        <div className="grid grid-cols-2 gap-4 mb-4">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-sm text-gray-500">Spending</p>
+              <p className="text-sm font-medium">{savingsRatio}%</p>
+            </div>
+            <Progress value={savingsRatio} className="h-2 mb-1" />
+            <p className="text-xs text-gray-500">of monthly income</p>
+          </div>
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <p className="text-sm text-gray-500">Budget</p>
+              <p className="text-sm font-medium">70%</p>
+            </div>
+            <Progress value={70} className="h-2 mb-1" />
+            <p className="text-xs text-gray-500">used this month</p>
+          </div>
+        </div>
+        
+        <div className="flex justify-between">
+          <div onClick={() => navigate('/analytics')} className="flex items-center text-primary cursor-pointer text-sm">
+            <span>See Analytics</span>
+            <ArrowUpRight className="h-4 w-4 ml-1" />
+          </div>
+          <div onClick={() => navigate('/insights')} className="flex items-center text-primary cursor-pointer text-sm">
+            <span>View Insights</span>
+            <ArrowUpRight className="h-4 w-4 ml-1" />
+          </div>
+        </div>
+      </div>
+      
       <div className="mb-6 grid grid-cols-2 gap-4">
         <SummaryCard 
           title="Income"
@@ -68,10 +104,11 @@ const HomePage: React.FC = () => {
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-xl font-semibold">Recent Transactions</h2>
           <button 
-            className="text-primary text-sm"
+            className="text-primary text-sm flex items-center"
             onClick={() => navigate('/transactions')}
           >
             View All
+            <ChevronRight className="h-4 w-4" />
           </button>
         </div>
         
@@ -95,7 +132,10 @@ const HomePage: React.FC = () => {
       <div className="mb-6">
         <div className="flex justify-between items-center mb-3">
           <h2 className="text-xl font-semibold">Upcoming Bills</h2>
-          <button className="text-primary text-sm">View All</button>
+          <button className="text-primary text-sm flex items-center">
+            View All
+            <ChevronRight className="h-4 w-4" />
+          </button>
         </div>
         
         <div className="bg-white rounded-xl p-4 shadow-sm">
