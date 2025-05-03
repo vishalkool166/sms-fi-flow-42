@@ -28,6 +28,11 @@ import ProfilePage from "@/pages/ProfilePage";
 import DashboardPage from "@/pages/DashboardPage";
 import EnhancedAnalyticsPage from "@/pages/EnhancedAnalyticsPage";
 import FinancialInsightsPage from "@/pages/FinancialInsightsPage";
+import AIInsightsPage from "@/pages/AIInsightsPage";
+import NotificationsPage from "@/pages/NotificationsPage";
+import SearchPage from "@/pages/SearchPage";
+import TransactionDetailPage from "@/pages/TransactionDetailPage";
+import BillsPage from "@/pages/BillsPage";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +53,8 @@ const App = () => (
               <Route path="/insights" element={<FinancialInsightsPage />} />
               <Route path="/scan-sms" element={<ScanSMSPage />} />
               <Route path="/add-transaction" element={<AddTransactionPage />} />
+              <Route path="/edit-transaction/:id" element={<AddTransactionPage />} />
+              <Route path="/transaction/:id" element={<TransactionDetailPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/banks" element={<BanksPage />} />
@@ -57,6 +64,10 @@ const App = () => (
               <Route path="/budgets" element={<BudgetsPage />} />
               <Route path="/goals" element={<GoalsPage />} />
               <Route path="/accounts" element={<Navigate to="/banks" replace />} />
+              <Route path="/ai-insights" element={<AIInsightsPage />} />
+              <Route path="/notifications" element={<NotificationsPage />} />
+              <Route path="/search" element={<SearchPage />} />
+              <Route path="/bills" element={<BillsPage />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />

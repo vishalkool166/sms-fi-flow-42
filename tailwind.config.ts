@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -71,12 +70,36 @@ export default {
 					red: '#ef4444',
 					yellow: '#f59e0b',
 					purple: '#8B5CF6',
+					navy: '#1E3B70',
+					sky: '#29B6F6',
+					dark: '#2D3748',
+					medium: '#4A5568',
+					light: '#718096',
 				}
+			},
+			fontFamily: {
+				sans: ['SF Pro', 'Poppins', 'Inter', 'sans-serif'],
+				'sf-pro': ['SF Pro', 'sans-serif'],
+				'poppins': ['Poppins', 'sans-serif'],
+			},
+			fontSize: {
+				'heading': '28px',
+				'subheading': '18px',
+				'body': '16px',
+				'caption': '14px',
+			},
+			fontWeight: {
+				heading: '700',
+				value: '600',
+				label: '500',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				'card': '16px',
+				'button': '12px',
+				'main-card': '24px',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -141,6 +164,14 @@ export default {
 				'fade-out': 'fade-out 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'pulse-soft': 'pulse-soft 2s ease-in-out infinite',
+				'scale-down': 'scale-down 0.2s ease-out',
+				'scale-up': 'scale-up 0.2s ease-out',
+				'hover-elevation': 'hover-elevation 0.3s ease-out',
+			},
+			boxShadow: {
+				'premium': '0 4px 15px rgba(0, 0, 0, 0.07)',
+				'premium-hover': '0 8px 20px rgba(0, 0, 0, 0.09)',
+				'card': '0 2px 10px rgba(0, 0, 0, 0.05)',
 			}
 		}
 	},
