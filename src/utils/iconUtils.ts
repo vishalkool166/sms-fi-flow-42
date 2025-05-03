@@ -55,3 +55,24 @@ export const getCategoryColor = (category: CategoryType): string => {
   
   return colorMap[category] || 'gray';
 };
+
+// Map color strings to valid color types
+export const mapColorToType = (color: string): "blue" | "green" | "red" | "yellow" | "purple" | "navy" | "sky" | "teal" | "amber" | "indigo" | "pink" | "orange" | "gray" => {
+  const validColors: Record<string, "blue" | "green" | "red" | "yellow" | "purple" | "navy" | "sky" | "teal" | "amber" | "indigo" | "pink" | "orange" | "gray"> = {
+    'red': 'red',
+    'blue': 'blue',
+    'green': 'green',
+    'purple': 'purple',
+    'yellow': 'yellow',
+    'navy': 'navy',
+    'sky': 'sky',
+    'teal': 'teal',
+    'amber': 'amber',
+    'indigo': 'indigo',
+    'pink': 'pink',
+    'orange': 'orange',
+    'gray': 'gray',
+  };
+  
+  return validColors[color] || 'gray';
+};

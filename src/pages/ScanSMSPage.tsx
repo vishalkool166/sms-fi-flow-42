@@ -15,6 +15,7 @@ import { ArrowLeft, MessageSquare, Search, Loader2, Scan, CheckCircle, AlertCirc
 import PremiumCard from '@/components/PremiumCard';
 import SMSPreview from '@/components/SMSPreview';
 import { toast } from '@/components/ui/use-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ScanSMSPage: React.FC = () => {
   const navigate = useNavigate();
@@ -81,30 +82,43 @@ const ScanSMSPage: React.FC = () => {
   };
   
   return (
-    <div className="p-4 max-w-md mx-auto pb-20">
+    <motion.div 
+      className="p-4 max-w-md mx-auto pb-20"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.3 }}
+    >
       <div className="flex items-center mb-6">
-        <button 
+        <motion.button 
           className="mr-3 p-2 rounded-full hover:bg-gray-100"
           onClick={() => navigate(-1)}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
         >
           <ArrowLeft className="h-5 w-5" />
-        </button>
+        </motion.button>
         <h1 className="text-xl font-bold">Scan SMS</h1>
       </div>
       
-      <PremiumCard variant="gradient" className="mb-6" withPattern>
-        <div className="flex items-center">
-          <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4">
-            <MessageSquare className="h-6 w-6" />
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
+        <PremiumCard variant="gradient" className="mb-6" withPattern>
+          <div className="flex items-center">
+            <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center mr-4">
+              <MessageSquare className="h-6 w-6" />
+            </div>
+            <div>
+              <h2 className="text-lg font-bold mb-1">SMS Scanner</h2>
+              <p className="text-sm opacity-90">
+                Scan your SMS messages to automatically detect and track your expenses
+              </p>
+            </div>
           </div>
-          <div>
-            <h2 className="text-lg font-bold mb-1">SMS Scanner</h2>
-            <p className="text-sm opacity-90">
-              Scan your SMS messages to automatically detect and track your expenses
-            </p>
-          </div>
-        </div>
-      </PremiumCard>
+        </PremiumCard>
+      </motion.div>
       
       <div className="relative mb-6">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -121,57 +135,73 @@ const ScanSMSPage: React.FC = () => {
         <h2 className="text-lg font-bold">
           Unprocessed SMS <span className="text-sm text-gray-500">({unprocessedSMS.length})</span>
         </h2>
-        <Button 
-          onClick={handleScanAll} 
-          disabled={isScanning || unprocessedSMS.length === 0}
-          size="sm"
-        >
-          {isScanning ? (
-            <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Scanning...
-            </>
-          ) : (
-            <>
-              <Scan className="h-4 w-4 mr-2" /> Scan All
-            </>
-          )}
-        </Button>
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          <Button 
+            onClick={handleScanAll} 
+            disabled={isScanning || unprocessedSMS.length === 0}
+            size="sm"
+          >
+            {isScanning ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" /> Scanning...
+              </>
+            ) : (
+              <>
+                <Scan className="h-4 w-4 mr-2" /> Scan All
+              </>
+            )}
+          </Button>
+        </motion.div>
       </div>
       
-      {unprocessedSMS.length > 0 ? (
-        <div className="space-y-4 mb-6">
-          {unprocessedSMS.map((sms) => (
-            <SMSPreview 
-              key={sms.id} 
-              sms={sms} 
-              onProcess={handleProcessSMS} 
-              isProcessing={processingId === sms.id}
-            />
-          ))}
-        </div>
-      ) : (
-        <PremiumCard className="mb-6 text-center py-10">
-          {searchTerm ? (
-            <>
-              <div className="flex justify-center mb-4">
-                <AlertCircle className="h-12 w-12 text-gray-300" />
-              </div>
-              <p className="text-finance-medium mb-2">No SMS messages match your search</p>
-              <Button variant="outline" onClick={() => setSearchTerm('')}>
-                Clear Search
-              </Button>
-            </>
-          ) : (
-            <>
-              <div className="flex justify-center mb-4">
-                <CheckCircle className="h-12 w-12 text-green-500" />
-              </div>
-              <p className="font-medium text-lg text-green-600">All Messages Processed</p>
-              <p className="text-finance-medium">You've processed all available SMS messages</p>
-            </>
-          )}
-        </PremiumCard>
-      )}
+      <AnimatePresence>
+        {unprocessedSMS.length > 0 ? (
+          <motion.div 
+            className="space-y-4 mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            {unprocessedSMS.map((sms) => (
+              <motion.div 
+                key={sms.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SMSPreview 
+                  sms={sms} 
+                  onProcess={handleProcessSMS} 
+                  isProcessing={processingId === sms.id}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : (
+          <PremiumCard className="mb-6 text-center py-10">
+            {searchTerm ? (
+              <>
+                <div className="flex justify-center mb-4">
+                  <AlertCircle className="h-12 w-12 text-gray-300" />
+                </div>
+                <p className="text-finance-medium mb-2">No SMS messages match your search</p>
+                <Button variant="outline" onClick={() => setSearchTerm('')}>
+                  Clear Search
+                </Button>
+              </>
+            ) : (
+              <>
+                <div className="flex justify-center mb-4">
+                  <CheckCircle className="h-12 w-12 text-green-500" />
+                </div>
+                <p className="font-medium text-lg text-green-600">All Messages Processed</p>
+                <p className="text-finance-medium">You've processed all available SMS messages</p>
+              </>
+            )}
+          </PremiumCard>
+        )}
+      </AnimatePresence>
       
       {processedSMS.length > 0 && (
         <>
@@ -191,15 +221,26 @@ const ScanSMSPage: React.FC = () => {
             )}
           </div>
           
-          <div className="space-y-4 mb-6">
+          <motion.div 
+            className="space-y-4 mb-6"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
             {processedSMS.map((sms) => (
-              <SMSPreview 
-                key={sms.id} 
-                sms={sms} 
-                onProcess={handleProcessSMS}
-              />
+              <motion.div 
+                key={sms.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <SMSPreview 
+                  key={sms.id} 
+                  sms={sms} 
+                  onProcess={handleProcessSMS}
+                />
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </>
       )}
       
@@ -247,7 +288,7 @@ const ScanSMSPage: React.FC = () => {
           </div>
         </PremiumCard>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
