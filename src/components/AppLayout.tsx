@@ -15,7 +15,8 @@ import {
   Building,
   Calculator,
   BarChart3,
-  Goal
+  Goal,
+  Users // Added this import
 } from 'lucide-react';
 
 const AppLayout: React.FC = () => {
