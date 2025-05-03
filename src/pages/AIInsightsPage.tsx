@@ -37,7 +37,7 @@ const AIInsightsPage: React.FC = () => {
     {
       id: 4,
       title: 'Budget Achievement',
-      description: 'Congratulations! You've stayed under your entertainment budget for 3 consecutive months.',
+      description: "Congratulations! You've stayed under your entertainment budget for 3 consecutive months.",
       icon: Target,
       color: 'blue',
       priority: 'low'
@@ -61,7 +61,7 @@ const AIInsightsPage: React.FC = () => {
     {
       id: 7,
       title: 'Goal Progress',
-      description: 'At your current savings rate, you'll reach your vacation goal 2 months ahead of schedule.',
+      description: "At your current savings rate, you'll reach your vacation goal 2 months ahead of schedule.",
       icon: PiggyBank,
       color: 'teal',
       priority: 'low'

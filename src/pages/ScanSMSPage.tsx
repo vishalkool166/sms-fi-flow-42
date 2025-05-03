@@ -4,13 +4,13 @@ import { useApp } from '@/context/AppContext';
 import { SMS } from '@/models/SMS';
 import { useNavigate } from 'react-router-dom';
 import { 
-  Button,
+  Button, 
   Card, 
   CardContent, 
   CardHeader, 
   CardTitle, 
   CardDescription 
-} from '@/components/ui';
+} from '@/components/ui/card';
 import { ArrowLeft, MessageSquare, Search, Loader2, Scan, CheckCircle, AlertCircle } from 'lucide-react';
 import PremiumCard from '@/components/PremiumCard';
 import SMSPreview from '@/components/SMSPreview';
