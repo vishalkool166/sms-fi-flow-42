@@ -23,6 +23,11 @@ import LoansPage from "@/pages/LoansPage";
 import DebtsPage from "@/pages/DebtsPage";
 import BudgetsPage from "@/pages/BudgetsPage";
 import NotFound from "@/pages/NotFound";
+import GoalsPage from "@/pages/GoalsPage";
+import ProfilePage from "@/pages/ProfilePage";
+import DashboardPage from "@/pages/DashboardPage";
+import EnhancedAnalyticsPage from "@/pages/EnhancedAnalyticsPage";
+import FinancialInsightsPage from "@/pages/FinancialInsightsPage";
 
 const queryClient = new QueryClient();
 
@@ -37,17 +42,20 @@ const App = () => (
             <Route path="/onboarding" element={<OnboardingPage />} />
             
             <Route element={<AppLayout />}>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/analytics" element={<AnalyticsPage />} />
-              <Route path="/insights" element={<InsightsPage />} />
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/home" element={<HomePage />} />
+              <Route path="/analytics" element={<EnhancedAnalyticsPage />} />
+              <Route path="/insights" element={<FinancialInsightsPage />} />
               <Route path="/scan-sms" element={<ScanSMSPage />} />
               <Route path="/add-transaction" element={<AddTransactionPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/profile" element={<ProfilePage />} />
               <Route path="/banks" element={<BanksPage />} />
               <Route path="/cards" element={<CardsPage />} />
               <Route path="/loans" element={<LoansPage />} />
               <Route path="/debts" element={<DebtsPage />} />
               <Route path="/budgets" element={<BudgetsPage />} />
+              <Route path="/goals" element={<GoalsPage />} />
               <Route path="/accounts" element={<Navigate to="/banks" replace />} />
             </Route>
             

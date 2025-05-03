@@ -16,7 +16,8 @@ import {
   Calculator,
   BarChart3,
   Goal,
-  Users // Added this import
+  Users,
+  Target
 } from 'lucide-react';
 
 const AppLayout: React.FC = () => {
@@ -36,7 +37,7 @@ const AppLayout: React.FC = () => {
           <h1 className="text-lg font-bold ml-2">SMS-Fi Flow</h1>
         </div>
         <div 
-          onClick={() => navigate('/settings')}
+          onClick={() => navigate('/profile')}
           className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center cursor-pointer"
         >
           <UserRound className="h-5 w-5 text-gray-600" />
@@ -49,7 +50,7 @@ const AppLayout: React.FC = () => {
       
       <div className="fixed bottom-0 w-full">
         {isAddMenuOpen && (
-          <div className="bg-white rounded-t-2xl shadow-lg p-4 animate-fade-in">
+          <div className="bg-white rounded-t-2xl shadow-lg p-4 animate-slide-up">
             <div className="flex justify-between items-center mb-3">
               <h3 className="font-medium">Add New</h3>
               <button 
@@ -141,14 +142,14 @@ const AppLayout: React.FC = () => {
                 <span className="text-sm">Debts</span>
               </Link>
               <Link 
-                to="/manual-entry"
-                className="flex flex-col items-center p-3 bg-pink-50 rounded-lg"
+                to="/goals"
+                className="flex flex-col items-center p-3 bg-cyan-50 rounded-lg"
                 onClick={() => setIsAddMenuOpen(false)}
               >
-                <div className="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center mb-1">
-                  <Edit className="h-5 w-5 text-pink-600" />
+                <div className="w-10 h-10 bg-cyan-100 rounded-full flex items-center justify-center mb-1">
+                  <Target className="h-5 w-5 text-cyan-600" />
                 </div>
-                <span className="text-sm">Manual</span>
+                <span className="text-sm">Goals</span>
               </Link>
             </div>
           </div>
@@ -182,7 +183,7 @@ const AppLayout: React.FC = () => {
               <span className="text-xs mt-1">Analytics</span>
             </Link>
             
-            <Link to="/accounts" className={`flex flex-col items-center p-2 ${isActive('/accounts') || isActive('/banks') || isActive('/cards') ? 'text-primary' : 'text-gray-500'}`}>
+            <Link to="/banks" className={`flex flex-col items-center p-2 ${isActive('/banks') || isActive('/cards') ? 'text-primary' : 'text-gray-500'}`}>
               <CreditCard className="h-6 w-6" />
               <span className="text-xs mt-1">Accounts</span>
             </Link>
