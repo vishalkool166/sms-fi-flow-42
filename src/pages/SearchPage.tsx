@@ -1,29 +1,64 @@
 
 import React, { useState } from 'react';
-import { ArrowLeft, Search, Calendar, BarChart3, Tag, Clock } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import PremiumCard from '@/components/PremiumCard';
-import IconBox from '@/components/IconBox';
-import { Input } from '@/components/ui/input';
-import TransactionItem from '@/components/TransactionItem';
 import { useApp } from '@/context/AppContext';
+import { Transaction } from '@/models/Transaction';
+import { ArrowLeft, Search, X, CreditCard, BarChart2, CalendarClock, Target } from 'lucide-react';
+import PremiumCard from '@/components/PremiumCard';
+import PremiumTransactionItem from '@/components/PremiumTransactionItem';
+import { formatCurrency } from '@/utils/formatters';
+import { Button } from '@/components/ui/button';
 
 const SearchPage: React.FC = () => {
   const navigate = useNavigate();
-  const { getFilteredTransactions } = useApp();
-  const [searchQuery, setSearchQuery] = useState('');
+  const { transactions } = useApp();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState<Transaction[]>([]);
+  const [showResults, setShowResults] = useState(false);
   
-  // Sample recent searches
-  const recentSearches = ['amazon', 'netflix', 'grocery', 'taxi'];
+  // Recent searches (demo data)
+  const recentSearches = ['Amazon', 'Food', 'Swiggy', 'Rent'];
   
-  const searchResults = searchQuery ? 
-    getFilteredTransactions(transaction => 
-      transaction.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      (transaction.merchant && transaction.merchant.toLowerCase().includes(searchQuery.toLowerCase()))
-    ) : [];
+  // Quick links
+  const quickLinks = [
+    { name: 'Transactions', icon: CreditCard, path: '/home' },
+    { name: 'Analytics', icon: BarChart2, path: '/analytics' },
+    { name: 'Bills', icon: CalendarClock, path: '/bills' },
+    { name: 'Goals', icon: Target, path: '/goals' },
+  ];
+  
+  const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+    
+    const results = transactions.filter(t => 
+      t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (t.merchant && t.merchant.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      t.category.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    
+    setSearchResults(results);
+    setShowResults(true);
+  };
+  
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+  
+  const clearSearch = () => {
+    setSearchTerm('');
+    setSearchResults([]);
+    setShowResults(false);
+  };
+  
+  const handleQuickSearch = (term: string) => {
+    setSearchTerm(term);
+    setTimeout(() => handleSearch(), 100);
+  };
   
   return (
-    <div className="p-5 pb-28 max-w-md mx-auto">
+    <div className="p-4 pb-24 max-w-md mx-auto">
       <div className="flex items-center mb-6">
         <button 
           className="mr-3 p-2 rounded-full hover:bg-gray-100"
@@ -31,89 +66,107 @@ const SearchPage: React.FC = () => {
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <h1 className="text-heading">Search Transactions</h1>
+        <h1 className="text-xl font-bold">Search</h1>
       </div>
       
       <div className="relative mb-6">
-        <Input 
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 h-4 w-4" />
+        <input
           type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search transactions, merchants..."
-          className="pl-10 py-6 font-medium rounded-xl border-gray-200"
+          placeholder="Search transactions, categories..."
+          className="w-full pl-10 pr-10 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-lg"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyPress={handleKeyPress}
+          autoFocus
         />
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-finance-medium" />
+        {searchTerm && (
+          <button
+            onClick={clearSearch}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
       </div>
       
-      {!searchQuery && (
+      {!showResults && (
         <>
-          <div className="mb-6">
-            <h2 className="text-lg font-heading mb-4">Recent Searches</h2>
-            <div className="flex flex-wrap gap-2">
-              {recentSearches.map((search, index) => (
-                <button 
-                  key={index} 
-                  className="px-4 py-2 bg-gray-100 rounded-full text-sm font-medium hover:bg-gray-200"
-                  onClick={() => setSearchQuery(search)}
-                >
-                  {search}
-                </button>
-              ))}
+          {recentSearches.length > 0 && (
+            <div className="mb-6">
+              <div className="flex justify-between items-center mb-3">
+                <h2 className="text-sm font-medium text-finance-medium">Recent Searches</h2>
+                <Button variant="ghost" size="sm" className="h-6 text-xs">Clear All</Button>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {recentSearches.map((term, index) => (
+                  <button
+                    key={index}
+                    className="px-3 py-1 bg-gray-100 rounded-full text-finance-medium hover:bg-gray-200 text-sm"
+                    onClick={() => handleQuickSearch(term)}
+                  >
+                    {term}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           
-          <div className="mb-6">
-            <h2 className="text-lg font-heading mb-4">Filter By</h2>
+          <div>
+            <h2 className="text-sm font-medium text-finance-medium mb-3">Quick Access</h2>
             <div className="grid grid-cols-2 gap-3">
-              <PremiumCard className="flex items-center p-4 animate-hover">
-                <IconBox icon={Calendar} color="blue" className="mr-3" />
-                <span className="font-medium">Date</span>
-              </PremiumCard>
-              <PremiumCard className="flex items-center p-4 animate-hover">
-                <IconBox icon={BarChart3} color="green" className="mr-3" />
-                <span className="font-medium">Amount</span>
-              </PremiumCard>
-              <PremiumCard className="flex items-center p-4 animate-hover">
-                <IconBox icon={Tag} color="purple" className="mr-3" />
-                <span className="font-medium">Category</span>
-              </PremiumCard>
-              <PremiumCard className="flex items-center p-4 animate-hover">
-                <IconBox icon={Clock} color="amber" className="mr-3" />
-                <span className="font-medium">Recent</span>
-              </PremiumCard>
+              {quickLinks.map((link, index) => (
+                <PremiumCard 
+                  key={index} 
+                  className="p-4 animate-hover"
+                  onClick={() => navigate(link.path)}
+                >
+                  <div className="flex items-center">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mr-3">
+                      <link.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <span>{link.name}</span>
+                  </div>
+                </PremiumCard>
+              ))}
             </div>
           </div>
         </>
       )}
       
-      {searchQuery && (
+      {showResults && (
         <div>
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-heading">Search Results</h2>
-            <p className="text-sm text-finance-medium">
-              {searchResults.length} {searchResults.length === 1 ? 'result' : 'results'} found
-            </p>
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-sm font-medium text-finance-medium">
+              Results for "{searchTerm}" ({searchResults.length})
+            </h2>
+            <Button variant="ghost" size="sm" className="h-6 text-xs" onClick={clearSearch}>
+              Clear
+            </Button>
           </div>
           
           {searchResults.length > 0 ? (
-            <PremiumCard className="p-0 overflow-hidden">
-              {searchResults.map(transaction => (
-                <TransactionItem 
-                  key={transaction.id} 
-                  transaction={transaction} 
+            <PremiumCard className="mb-6">
+              {searchResults.map((transaction) => (
+                <PremiumTransactionItem 
+                  key={transaction.id}
+                  transaction={transaction}
                   onClick={() => navigate(`/transaction/${transaction.id}`)}
                 />
               ))}
             </PremiumCard>
           ) : (
-            <div className="text-center py-8">
-              <div className="bg-gray-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
-                <Search className="h-8 w-8 text-finance-medium" />
+            <div className="text-center py-10">
+              <div className="flex justify-center mb-4">
+                <Search className="h-12 w-12 text-gray-300" />
               </div>
-              <h3 className="font-value mb-1">No results found</h3>
-              <p className="text-finance-medium text-sm">
-                Try searching for something else
+              <p className="text-lg font-medium mb-2">No results found</p>
+              <p className="text-finance-medium mb-4">
+                We couldn't find any transactions matching "{searchTerm}"
               </p>
+              <Button onClick={clearSearch} variant="outline">
+                Clear Search
+              </Button>
             </div>
           )}
         </div>

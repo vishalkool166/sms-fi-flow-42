@@ -16,8 +16,8 @@ interface AppContextType {
   addTransaction: (transaction: Omit<Transaction, 'id'>) => void;
   deleteTransaction: (id: string) => void;
   updateTransaction: (transaction: Transaction) => void;
-  processNewSMS: (sms: SMS) => void;
-  scanAllUnprocessedSMS: () => void;
+  processNewSMS: (sms: SMS) => boolean;
+  scanAllUnprocessedSMS: () => number;
   getTransactionsByCategory: () => Record<string, number>;
   getRecentTransactions: (limit?: number) => Transaction[];
 }
@@ -188,7 +188,9 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   };
 
   const getRecentTransactions = (limit = 10) => {
-    return transactions.slice(0, limit);
+    return transactions
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, limit);
   };
 
   const value = {

@@ -19,10 +19,14 @@ export interface Transaction {
   category: CategoryType;
   description: string;
   merchant?: string;
+  merchantLogo?: string;
   date: Date;
   isAutoDetected: boolean;
   smsId?: string;
   bankName?: string;
+  note?: string;
+  tags?: string[];
+  location?: string;
 }
 
 export const getCategoryColor = (category: CategoryType): string => {
@@ -72,5 +76,31 @@ export const getCategoryIcon = (category: CategoryType): string => {
       return '📈';
     default:
       return '📎';
+  }
+};
+
+// Get category icon as Lucide component name
+export const getCategoryIconComponent = (category: CategoryType): string => {
+  switch (category) {
+    case 'food':
+      return 'Utensils';
+    case 'transport':
+      return 'Car';
+    case 'shopping':
+      return 'ShoppingBag';
+    case 'entertainment':
+      return 'Film';
+    case 'utilities':
+      return 'Home';
+    case 'health':
+      return 'Stethoscope';
+    case 'education':
+      return 'GraduationCap';
+    case 'salary':
+      return 'DollarSign';
+    case 'investment':
+      return 'TrendingUp';
+    default:
+      return 'CreditCard';
   }
 };

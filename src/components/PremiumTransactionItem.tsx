@@ -3,8 +3,21 @@ import React from 'react';
 import { Transaction } from '@/models/Transaction';
 import { formatCurrency } from '@/utils/formatters';
 import { format } from 'date-fns';
-import { getCategoryIcon } from '@/utils/iconUtils';
+import { getCategoryIcon, getCategoryIconComponent } from '@/utils/iconUtils';
 import IconBox from './IconBox';
+import { 
+  ShoppingBag, 
+  Utensils, 
+  Car, 
+  Film, 
+  Home, 
+  Stethoscope, 
+  GraduationCap, 
+  DollarSign, 
+  TrendingUp, 
+  CreditCard,
+  Store
+} from 'lucide-react';
 
 interface TransactionItemProps {
   transaction: Transaction;
@@ -12,15 +25,29 @@ interface TransactionItemProps {
 }
 
 const PremiumTransactionItem: React.FC<TransactionItemProps> = ({ transaction, onClick }) => {
-  const { description, amount, type, date, category, merchant } = transaction;
+  const { description, amount, type, date, category, merchant, note } = transaction;
   const isExpense = type === 'expense';
   const amountClass = isExpense ? 'text-expense' : 'text-income';
   const formattedAmount = isExpense ? `-${formatCurrency(amount)}` : `+${formatCurrency(amount)}`;
-  const formattedDate = date ? format(new Date(date), 'MMM d') : 'N/A';
+  const formattedDate = date ? format(new Date(date), 'MMM d, h:mm a') : 'N/A';
   
-  // Get category icon config
-  const categoryConfig = getCategoryIcon(category);
-  const IconComponent = categoryConfig.icon;
+  // Get category icon component
+  const getCategoryIconByName = (cat: string) => {
+    switch (cat) {
+      case 'shopping': return ShoppingBag;
+      case 'food': return Utensils;
+      case 'transport': return Car;
+      case 'entertainment': return Film;
+      case 'utilities': return Home;
+      case 'health': return Stethoscope;
+      case 'education': return GraduationCap;
+      case 'salary': return DollarSign;
+      case 'investment': return TrendingUp;
+      default: return CreditCard;
+    }
+  };
+
+  const IconComponent = getCategoryIconByName(category);
   
   const getColorClass = (category: string): string => {
     const colorMap: Record<string, string> = {
@@ -58,6 +85,7 @@ const PremiumTransactionItem: React.FC<TransactionItemProps> = ({ transaction, o
         <div className="flex justify-between">
           <p className="text-sm text-finance-light">
             {merchant ? merchant : category[0].toUpperCase() + category.slice(1)}
+            {note && <span className="text-xs ml-2 text-finance-light">• {note}</span>}
           </p>
           <p className="text-sm text-finance-light">{formattedDate}</p>
         </div>

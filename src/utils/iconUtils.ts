@@ -1,90 +1,57 @@
 
 import { 
   ShoppingBag, 
-  Car, 
   Utensils, 
+  Car, 
   Film, 
   Home, 
   Stethoscope, 
   GraduationCap, 
-  Briefcase, 
+  DollarSign, 
   TrendingUp, 
-  HelpCircle
-} from "lucide-react";
-import { LucideIcon } from "lucide-react";
+  CreditCard,
+  LucideIcon
+} from 'lucide-react';
+import { CategoryType } from '@/models/Transaction';
 
-export type CategoryIconType = 
-  'shopping' | 'transport' | 'food' | 'entertainment' | 
-  'utilities' | 'health' | 'education' | 'salary' | 
-  'investment' | 'other';
-
-export interface CategoryIconConfig {
-  icon: LucideIcon;
-  color: string;
-  bgColor: string;
-}
-
-export const CategoryIcons: Record<CategoryIconType, CategoryIconConfig> = {
-  shopping: {
-    icon: ShoppingBag,
-    color: '#8B5CF6',
-    bgColor: '#EDE9FE',
-  },
-  transport: {
-    icon: Car,
-    color: '#0EA5E9',
-    bgColor: '#E0F2FE',
-  },
-  food: {
-    icon: Utensils,
-    color: '#F97316',
-    bgColor: '#FFEDD5',
-  },
-  entertainment: {
-    icon: Film,
-    color: '#EC4899',
-    bgColor: '#FCE7F3',
-  },
-  utilities: {
-    icon: Home,
-    color: '#6B7280',
-    bgColor: '#F3F4F6',
-  },
-  health: {
-    icon: Stethoscope,
-    color: '#EF4444',
-    bgColor: '#FEE2E2',
-  },
-  education: {
-    icon: GraduationCap,
-    color: '#F59E0B',
-    bgColor: '#FEF3C7',
-  },
-  salary: {
-    icon: Briefcase,
-    color: '#10B981',
-    bgColor: '#D1FAE5',
-  },
-  investment: {
-    icon: TrendingUp,
-    color: '#3B82F6',
-    bgColor: '#DBEAFE',
-  },
-  other: {
-    icon: HelpCircle,
-    color: '#6B7280',
-    bgColor: '#F3F4F6',
-  },
+export const getCategoryIcon = (category: CategoryType): { icon: LucideIcon; color: string } => {
+  switch (category) {
+    case 'food':
+      return { icon: Utensils, color: 'red' };
+    case 'transport':
+      return { icon: Car, color: 'blue' };
+    case 'shopping':
+      return { icon: ShoppingBag, color: 'purple' };
+    case 'entertainment':
+      return { icon: Film, color: 'pink' };
+    case 'utilities':
+      return { icon: Home, color: 'gray' };
+    case 'health':
+      return { icon: Stethoscope, color: 'red' };
+    case 'education':
+      return { icon: GraduationCap, color: 'yellow' };
+    case 'salary':
+      return { icon: DollarSign, color: 'green' };
+    case 'investment':
+      return { icon: TrendingUp, color: 'teal' };
+    default:
+      return { icon: CreditCard, color: 'gray' };
+  }
 };
 
-export const getCategoryIcon = (category: string): CategoryIconConfig => {
-  return CategoryIcons[category as CategoryIconType] || CategoryIcons.other;
-};
-
-export const PremiumColors = {
-  navy: '#1E3B70',
-  sky: '#29B6F6',
-  dark: '#2D3748',
-  medium: '#4A5568',
-  light: '#718096',
+export const getCategoryColor = (category: CategoryType): string => {
+  const colorMap: Record<string, string> = {
+    food: 'red',
+    transport: 'blue',
+    shopping: 'purple',
+    entertainment: 'pink',
+    utilities: 'gray',
+    health: 'red',
+    education: 'yellow',
+    salary: 'green',
+    investment: 'teal',
+    other: 'gray',
+  };
+  
+  return colorMap[category] || 'gray';
 };
