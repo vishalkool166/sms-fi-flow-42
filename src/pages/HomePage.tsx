@@ -1,250 +1,440 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
-import { formatCurrency } from '@/utils/formatters';
+import { useNavigate } from 'react-router-dom';
 import PremiumCard from '@/components/PremiumCard';
 import PremiumTransactionItem from '@/components/PremiumTransactionItem';
-import EnhancedChart from '@/components/EnhancedChart';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
+import PremiumProgress from '@/components/PremiumProgress';
+import { formatCurrency } from '@/utils/formatters';
 import { 
-  ArrowDown, 
-  ArrowUp, 
+  ArrowRight, 
+  Wallet, 
+  Building, 
   CreditCard, 
   Calendar, 
-  Wallet, 
-  TrendingUp, 
-  PlusCircle, 
-  ChevronRight,
-  Zap
+  Bell, 
+  ChevronLeft, 
+  ChevronRight, 
+  PiggyBank, 
+  BarChart3, 
+  Utensils, 
+  ShoppingBag, 
+  Car,
+  Film
 } from 'lucide-react';
-import PremiumProgress from '@/components/PremiumProgress';
-import IconBox from '@/components/IconBox';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
-  const { transactions, totalBalance, incomeTotal, expenseTotal } = useApp();
-  const [period, setPeriod] = useState<'week' | 'month' | 'year'>('month');
+  const { transactions, totalBalance, incomeTotal, expenseTotal, getRecentTransactions } = useApp();
+  const recentTransactions = getRecentTransactions(5);
   
-  // Get recent transactions
-  const recentTransactions = transactions
-    .slice(0, 5)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const cardsRef = useRef<HTMLDivElement>(null);
   
-  // Demo chart data
-  const chartData = [
-    { name: 'Jan', expense: 6000, income: 9000 },
-    { name: 'Feb', expense: 7500, income: 9500 },
-    { name: 'Mar', expense: 5500, income: 9200 },
-    { name: 'Apr', expense: 8000, income: 10500 },
-    { name: 'May', expense: 6800, income: 11000 },
-    { name: 'Jun', expense: 7200, income: 10800 },
+  const bankCards = [
+    { 
+      id: 1, 
+      type: 'Bank', 
+      name: 'HDFC Bank', 
+      number: '**** 5678', 
+      balance: 24500,
+      color: 'from-blue-700 to-blue-500'
+    },
+    { 
+      id: 2, 
+      type: 'Credit Card', 
+      name: 'HDFC Credit Card', 
+      number: '**** 1234', 
+      balance: -8450,
+      color: 'from-purple-700 to-purple-500'
+    },
+    { 
+      id: 3, 
+      type: 'Bank', 
+      name: 'SBI Bank', 
+      number: '**** 9012', 
+      balance: 18320,
+      color: 'from-teal-600 to-teal-400'
+    }
   ];
   
-  const budgets = [
-    { category: 'Shopping', current: 5200, limit: 8000, percentage: 65 },
-    { category: 'Food', current: 4800, limit: 6000, percentage: 80 },
-    { category: 'Transport', current: 2100, limit: 3000, percentage: 70 },
+  const weeklySpending = [
+    { day: 'Mon', amount: 850, category: 'food' },
+    { day: 'Tue', amount: 1200, category: 'shopping' },
+    { day: 'Wed', amount: 320, category: 'transport' },
+    { day: 'Thu', amount: 980, category: 'entertainment' },
+    { day: 'Fri', amount: 1600, category: 'food' },
+    { day: 'Sat', amount: 2400, category: 'shopping' },
+    { day: 'Sun', amount: 1100, category: 'entertainment' },
   ];
   
+  const upcomingBills = [
+    { id: 1, name: 'Credit Card Bill', amount: 12500, dueDate: '2025-05-06', daysLeft: 2 },
+    { id: 2, name: 'Rent', amount: 22000, dueDate: '2025-05-10', daysLeft: 6 },
+    { id: 3, name: 'Electricity Bill', amount: 3200, dueDate: '2025-05-15', daysLeft: 11 },
+  ];
+  
+  const getCategoryIcon = (category: string) => {
+    switch(category) {
+      case 'food': return <Utensils className="h-4 w-4" />;
+      case 'shopping': return <ShoppingBag className="h-4 w-4" />;
+      case 'transport': return <Car className="h-4 w-4" />;
+      case 'entertainment': return <Film className="h-4 w-4" />;
+      default: return <Wallet className="h-4 w-4" />;
+    }
+  };
+  
+  const getCategoryColor = (category: string) => {
+    switch(category) {
+      case 'food': return 'bg-orange-500';
+      case 'shopping': return 'bg-purple-500';
+      case 'transport': return 'bg-blue-500';
+      case 'entertainment': return 'bg-pink-500';
+      default: return 'bg-gray-500';
+    }
+  };
+  
+  const nextCard = () => {
+    if (currentCardIndex < bankCards.length - 1) {
+      setCurrentCardIndex(currentCardIndex + 1);
+    }
+  };
+  
+  const prevCard = () => {
+    if (currentCardIndex > 0) {
+      setCurrentCardIndex(currentCardIndex - 1);
+    }
+  };
+
+  // Monthly overview data
+  const savingsGoal = 25000;
+  const currentSavings = 18320;
+  const savingsPercentage = Math.min(Math.round((currentSavings / savingsGoal) * 100), 100);
+  
+  const totalBudget = 40000;
+  const spentAmount = 28500;
+  const budgetPercentage = Math.round((spentAmount / totalBudget) * 100);
+  const remainingBudget = totalBudget - spentAmount;
+
   return (
-    <div className="p-4 pb-24 max-w-md mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold mb-1">Welcome back,</h1>
-        <p className="text-finance-medium">Here's your financial summary</p>
-      </div>
-      
-      <PremiumCard variant="gradient" className="mb-6" withPattern>
-        <div className="flex justify-between mb-2">
-          <h2 className="text-sm font-medium opacity-90">Available Balance</h2>
-          <Button variant="ghost" size="sm" className="h-7 px-2 bg-white/20 text-white" onClick={() => navigate('/banks')}>
-            <Wallet className="h-4 w-4 mr-1" /> View Accounts
-          </Button>
+    <div className="p-5 pb-28">
+      <div className="flex justify-between items-center mb-5">
+        <div>
+          <h1 className="text-2xl font-bold">Hello, John! 👋</h1>
+          <p className="text-finance-medium">Let's track your finances</p>
         </div>
-        <div className="text-2xl font-bold mb-5">{formatCurrency(totalBalance)}</div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-white/20 rounded-lg p-3">
-            <div className="flex items-center mb-1">
-              <ArrowDown className="h-4 w-4 mr-2" />
-              <span className="text-sm">Expenses</span>
-            </div>
-            <div className="text-lg font-medium">{formatCurrency(expenseTotal)}</div>
-          </div>
-          <div className="bg-white/20 rounded-lg p-3">
-            <div className="flex items-center mb-1">
-              <ArrowUp className="h-4 w-4 mr-2" />
-              <span className="text-sm">Income</span>
-            </div>
-            <div className="text-lg font-medium">{formatCurrency(incomeTotal)}</div>
-          </div>
-        </div>
-      </PremiumCard>
-      
-      <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-bold">Cash Flow</h2>
-        <div className="flex space-x-2">
+        <div className="flex">
           <Button 
+            variant="ghost" 
             size="sm" 
-            variant={period === 'week' ? 'default' : 'outline'} 
-            className="h-7 px-3"
-            onClick={() => setPeriod('week')}
+            className="rounded-full"
+            onClick={() => navigate('/notifications')}
           >
-            W
+            <Bell className="h-5 w-5" />
           </Button>
           <Button 
+            variant="ghost" 
             size="sm" 
-            variant={period === 'month' ? 'default' : 'outline'} 
-            className="h-7 px-3"
-            onClick={() => setPeriod('month')}
+            className="rounded-full ml-1"
+            onClick={() => navigate('/calendar')}
           >
-            M
-          </Button>
-          <Button 
-            size="sm" 
-            variant={period === 'year' ? 'default' : 'outline'} 
-            className="h-7 px-3"
-            onClick={() => setPeriod('year')}
-          >
-            Y
+            <Calendar className="h-5 w-5" />
           </Button>
         </div>
       </div>
       
-      <PremiumCard className="mb-6">
-        <div className="h-60">
-          <EnhancedChart 
-            data={chartData} 
-            type="area"
-            lines={[
-              { dataKey: 'income', stroke: '#10B981', fill: '#10B981', fillOpacity: 0.2 },
-              { dataKey: 'expense', stroke: '#F97316', fill: '#F97316', fillOpacity: 0.2 }
-            ]}
-            height={220}
-          />
-        </div>
-      </PremiumCard>
-      
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">Recent Transactions</h2>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="text-finance-medium"
-          onClick={() => navigate('/transactions')}
-        >
-          See All
-          <ChevronRight className="h-4 w-4 ml-1" />
-        </Button>
-      </div>
-      
-      <PremiumCard className="mb-6">
-        {recentTransactions.length > 0 ? (
-          <div>
-            {recentTransactions.map((transaction) => (
-              <PremiumTransactionItem 
-                key={transaction.id}
-                transaction={transaction}
-                onClick={() => navigate(`/transaction/${transaction.id}`)}
-              />
+      {/* Card Carousel */}
+      <div className="relative mb-6">
+        <div className="overflow-hidden" ref={cardsRef}>
+          <div 
+            className="flex transition-transform duration-300 ease-out" 
+            style={{ transform: `translateX(-${currentCardIndex * 100}%)` }}
+          >
+            {bankCards.map((card, index) => (
+              <div key={card.id} className="w-full flex-shrink-0 px-1">
+                <motion.div
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className={`rounded-xl bg-gradient-to-br ${card.color} p-5 text-white shadow-lg h-[180px] flex flex-col justify-between`}
+                >
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <p className="text-white/80 text-sm">{card.type}</p>
+                      <h3 className="text-xl font-semibold mt-1">{card.name}</h3>
+                      <p className="text-sm mt-1">{card.number}</p>
+                    </div>
+                    <div>
+                      {card.type === 'Bank' ? (
+                        <Building className="h-6 w-6" />
+                      ) : (
+                        <CreditCard className="h-6 w-6" />
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-white/80 text-sm">Available Balance</p>
+                    <h3 className="text-2xl font-bold mt-1">
+                      {formatCurrency(card.balance)}
+                    </h3>
+                  </div>
+                </motion.div>
+              </div>
             ))}
-            <div className="p-3 text-center">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => navigate('/transactions')}
+          </div>
+        </div>
+        
+        {/* Pagination dots */}
+        <div className="flex justify-center mt-4">
+          {bankCards.map((_, index) => (
+            <button
+              key={index}
+              className={`h-2 mx-1 rounded-full transition-all ${
+                currentCardIndex === index ? "w-6 bg-finance-navy" : "w-2 bg-gray-300"
+              }`}
+              onClick={() => setCurrentCardIndex(index)}
+            />
+          ))}
+        </div>
+        
+        {/* Navigation buttons */}
+        {currentCardIndex > 0 && (
+          <button 
+            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center"
+            onClick={prevCard}
+          >
+            <ChevronLeft className="h-5 w-5" />
+          </button>
+        )}
+        
+        {currentCardIndex < bankCards.length - 1 && (
+          <button 
+            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center"
+            onClick={nextCard}
+          >
+            <ChevronRight className="h-5 w-5" />
+          </button>
+        )}
+      </div>
+      
+      {/* Monthly Overview */}
+      <PremiumCard className="mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-bold">Monthly Overview</h2>
+          <span className="text-sm text-gray-500">May 2025</span>
+        </div>
+        
+        <div className="space-y-6">
+          <div>
+            <div className="flex justify-between mb-1">
+              <h3 className="font-medium">Total Budget</h3>
+              <span className="text-sm font-medium">{formatCurrency(remainingBudget)} left of {formatCurrency(totalBudget)}</span>
+            </div>
+            <div className="relative h-4 w-full bg-gray-100 rounded-full overflow-hidden">
+              <motion.div 
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-blue-300"
+                initial={{ width: 0 }}
+                animate={{ width: `${budgetPercentage}%` }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+              />
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className="text-xs text-gray-500">Spent: {formatCurrency(spentAmount)}</span>
+              <span className="text-xs text-gray-500">{budgetPercentage}% used</span>
+            </div>
+          </div>
+          
+          <div>
+            <div className="flex justify-between mb-1">
+              <h3 className="font-medium">Savings Goal</h3>
+              <span className="text-sm font-medium">{formatCurrency(currentSavings)} of {formatCurrency(savingsGoal)}</span>
+            </div>
+            <div className="relative h-4 w-full bg-gray-100 rounded-full overflow-hidden">
+              <motion.div 
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-green-500 to-green-300"
+                initial={{ width: 0 }}
+                animate={{ width: `${savingsPercentage}%` }}
+                transition={{ duration: 1.5, ease: "easeOut" }}
+              />
+            </div>
+            <div className="flex justify-between mt-1">
+              <span className="text-xs text-gray-500">Current: {formatCurrency(currentSavings)}</span>
+              <span className="text-xs text-gray-500">{savingsPercentage}% achieved</span>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-3 gap-2 pt-2">
+            <div className="bg-blue-50 rounded-xl p-3 flex flex-col items-center">
+              <Wallet className="h-5 w-5 text-blue-500 mb-1" />
+              <span className="text-xs text-gray-600 mb-1">Income</span>
+              <span className="text-sm font-semibold text-blue-700">{formatCurrency(incomeTotal)}</span>
+            </div>
+            <div className="bg-red-50 rounded-xl p-3 flex flex-col items-center">
+              <ArrowRight className="h-5 w-5 text-red-500 mb-1" />
+              <span className="text-xs text-gray-600 mb-1">Expense</span>
+              <span className="text-sm font-semibold text-red-700">{formatCurrency(expenseTotal)}</span>
+            </div>
+            <div className="bg-green-50 rounded-xl p-3 flex flex-col items-center">
+              <PiggyBank className="h-5 w-5 text-green-500 mb-1" />
+              <span className="text-xs text-gray-600 mb-1">Saved</span>
+              <span className="text-sm font-semibold text-green-700">{formatCurrency(currentSavings)}</span>
+            </div>
+          </div>
+        </div>
+      </PremiumCard>
+      
+      {/* Weekly spending & Upcoming Bills */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+        {/* Weekly Spending */}
+        <PremiumCard className="h-full">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Weekly Spending</h2>
+            <ArrowRight className="h-4 w-4 text-gray-400" onClick={() => navigate('/analytics')} />
+          </div>
+          
+          <div className="flex justify-between h-[140px] items-end mt-4 mb-1">
+            {weeklySpending.map((day, index) => (
+              <div key={index} className="flex flex-col items-center">
+                <motion.div 
+                  className="relative mb-1 w-8 flex justify-center"
+                  initial={{ height: 0 }}
+                  animate={{ height: `${(day.amount / 2500) * 100}px` }}
+                  transition={{ duration: 0.8, delay: index * 0.1 }}
+                >
+                  <div className={`absolute bottom-0 w-6 rounded-t-md ${getCategoryColor(day.category)}`} style={{ 
+                    height: `${(day.amount / 2500) * 100}px` 
+                  }}>
+                    <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-white px-2 py-1 rounded-md shadow-md text-xs font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                      {formatCurrency(day.amount)}
+                    </div>
+                  </div>
+                </motion.div>
+                <span className="text-xs text-gray-500">{day.day}</span>
+              </div>
+            ))}
+          </div>
+          
+          <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
+            <div className="flex space-x-3">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-orange-500 mr-1"></div>
+                <span className="text-xs">Food</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-purple-500 mr-1"></div>
+                <span className="text-xs">Shopping</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-pink-500 mr-1"></div>
+                <span className="text-xs">Other</span>
+              </div>
+            </div>
+            <span className="text-xs text-gray-500">May 1-7</span>
+          </div>
+        </PremiumCard>
+        
+        {/* Upcoming Bills */}
+        <PremiumCard className="h-full">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-lg font-bold">Upcoming Bills</h2>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="h-8 text-xs"
+              onClick={() => navigate('/bills')}
+            >
+              View All
+            </Button>
+          </div>
+          
+          <div className="space-y-3">
+            {upcomingBills.map((bill) => (
+              <motion.div
+                key={bill.id}
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.4 }}
+                className="flex items-center justify-between p-3 rounded-lg border border-gray-100"
               >
-                View All Transactions
+                <div className="flex items-center">
+                  <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                    <Bell className="h-4 w-4 text-blue-600" />
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{bill.name}</p>
+                    <p className="text-xs text-gray-500">Due: {bill.dueDate}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="font-semibold text-expense">{formatCurrency(bill.amount)}</p>
+                  <p className="text-xs text-orange-500">
+                    {bill.daysLeft === 0 ? 'Due Today' : 
+                     bill.daysLeft === 1 ? 'Due Tomorrow' : 
+                     `Due in ${bill.daysLeft} days`}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+            
+            {upcomingBills.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-32">
+                <Bell className="h-10 w-10 text-gray-300 mb-2" />
+                <p className="text-gray-400">No upcoming bills</p>
+              </div>
+            )}
+          </div>
+        </PremiumCard>
+      </div>
+      
+      {/* Recent Transactions */}
+      <PremiumCard>
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-lg font-bold">Recent Transactions</h2>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-8 text-xs"
+            onClick={() => navigate('/transactions')}
+          >
+            View All
+          </Button>
+        </div>
+        
+        <div>
+          <AnimatePresence>
+            {recentTransactions.map((transaction, index) => (
+              <motion.div
+                key={transaction.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+              >
+                <PremiumTransactionItem 
+                  transaction={transaction} 
+                  onClick={() => navigate(`/transaction/${transaction.id}`)}
+                />
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          
+          {recentTransactions.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-10">
+              <Wallet className="h-12 w-12 text-gray-300 mb-2" />
+              <p className="text-gray-400">No transactions yet</p>
+              <Button 
+                onClick={() => navigate('/add-transaction')} 
+                className="mt-3"
+                size="sm"
+              >
+                Add Your First Transaction
               </Button>
             </div>
-          </div>
-        ) : (
-          <div className="py-8 text-center">
-            <div className="flex justify-center mb-2">
-              <CreditCard className="h-10 w-10 text-gray-300" />
-            </div>
-            <p className="text-finance-medium mb-4">No transactions yet</p>
-            <Button onClick={() => navigate('/add-transaction')}>
-              <PlusCircle className="h-4 w-4 mr-2" />
-              Add Transaction
-            </Button>
-          </div>
-        )}
-      </PremiumCard>
-      
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-bold">Budget Overview</h2>
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          className="text-finance-medium"
-          onClick={() => navigate('/budgets')}
-        >
-          Manage
-          <ChevronRight className="h-4 w-4 ml-1" />
-        </Button>
-      </div>
-      
-      <PremiumCard className="mb-6">
-        {budgets.map((budget, index) => (
-          <div key={index} className="mb-4 last:mb-0">
-            <div className="flex justify-between items-center mb-1">
-              <span className="font-medium">{budget.category}</span>
-              <span className="text-sm">
-                {formatCurrency(budget.current)} / {formatCurrency(budget.limit)}
-              </span>
-            </div>
-            <PremiumProgress 
-              value={budget.percentage} 
-              color={budget.percentage > 80 ? "warning" : "success"}
-            />
-          </div>
-        ))}
-      </PremiumCard>
-      
-      <PremiumCard className="mb-6 p-5 bg-gradient-to-r from-finance-navy to-finance-sky text-white" withPattern>
-        <div className="flex items-start">
-          <IconBox 
-            icon={Zap} 
-            color="yellow" 
-            size="lg" 
-            className="mr-4 bg-white/20 text-white"
-          />
-          <div className="flex-1">
-            <h3 className="font-value text-lg mb-1">Get Financial Insights</h3>
-            <p className="text-sm mb-3 opacity-90">
-              Discover personalized insights about your spending habits and financial health.
-            </p>
-            <Button 
-              size="sm" 
-              className="bg-white text-finance-navy hover:bg-white/90"
-              onClick={() => navigate('/ai-insights')}
-            >
-              View Insights
-            </Button>
-          </div>
+          )}
         </div>
       </PremiumCard>
-      
-      <div className="grid grid-cols-2 gap-4">
-        <Button 
-          className="w-full flex flex-col items-center py-6 h-auto"
-          variant="outline"
-          onClick={() => navigate('/add-transaction?type=expense')}
-        >
-          <ArrowDown className="h-6 w-6 mb-2 text-expense" />
-          <span>Add Expense</span>
-        </Button>
-        <Button 
-          className="w-full flex flex-col items-center py-6 h-auto"
-          variant="outline"
-          onClick={() => navigate('/add-transaction?type=income')}
-        >
-          <ArrowUp className="h-6 w-6 mb-2 text-income" />
-          <span>Add Income</span>
-        </Button>
-      </div>
     </div>
   );
 };

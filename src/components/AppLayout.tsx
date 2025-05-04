@@ -21,12 +21,25 @@ import {
   Target,
   Bell,
   Search,
-  Zap
+  Zap,
+  ChevronDown,
+  MoreHorizontal,
+  Wallet,
+  Award,
+  HelpCircle,
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import IconBox from '@/components/IconBox';
 import { AnimatePresence, motion } from 'framer-motion';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger, 
+  DropdownMenuSeparator
+} from '@/components/ui/dropdown-menu';
 
 const AppLayout: React.FC = () => {
   const location = useLocation();
@@ -62,12 +75,60 @@ const AppLayout: React.FC = () => {
           >
             <Search className="h-5 w-5 text-finance-dark" />
           </Button>
-          <div 
-            onClick={() => navigate('/profile')}
-            className="w-9 h-9 rounded-full bg-gradient-to-r from-finance-navy to-finance-sky flex items-center justify-center cursor-pointer text-white font-bold"
-          >
-            JD
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div 
+                className="w-9 h-9 rounded-full bg-gradient-to-r from-finance-navy to-finance-sky flex items-center justify-center cursor-pointer text-white font-bold"
+              >
+                JD
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56 bg-white">
+              <div className="flex items-center p-3 border-b">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-finance-navy to-finance-sky flex items-center justify-center text-white font-bold mr-3">
+                  JD
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">John Doe</p>
+                  <p className="text-xs text-finance-medium">john.doe@example.com</p>
+                </div>
+              </div>
+              <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
+                <UserRound className="h-4 w-4 mr-2" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/settings')} className="cursor-pointer">
+                <Settings className="h-4 w-4 mr-2" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => navigate('/ai-insights')} className="cursor-pointer">
+                <Zap className="h-4 w-4 mr-2" />
+                <span>AI Insights</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/goals')} className="cursor-pointer">
+                <Target className="h-4 w-4 mr-2" />
+                <span>Goals</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/banks')} className="cursor-pointer">
+                <Building className="h-4 w-4 mr-2" />
+                <span>Banks & Cards</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/bills')} className="cursor-pointer">
+                <Calculator className="h-4 w-4 mr-2" />
+                <span>Bills & Payments</span>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="cursor-pointer">
+                <HelpCircle className="h-4 w-4 mr-2" />
+                <span>Help & Support</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="text-red-500 cursor-pointer">
+                <LogOut className="h-4 w-4 mr-2" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </header>
       
@@ -218,10 +279,41 @@ const AppLayout: React.FC = () => {
               <span className="text-xs mt-1 font-label">Analytics</span>
             </Link>
             
-            <Link to="/profile" className={`flex flex-col items-center p-2 ${isActive('/profile') ? 'premium-text' : 'text-finance-medium'}`}>
-              <UserRound className="h-6 w-6" />
-              <span className="text-xs mt-1 font-label">Profile</span>
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div className={`flex flex-col items-center p-2 cursor-pointer ${isActive('/more') ? 'premium-text' : 'text-finance-medium'}`}>
+                  <MoreHorizontal className="h-6 w-6" />
+                  <span className="text-xs mt-1 font-label">More</span>
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuItem onClick={() => navigate('/profile')}>
+                  <UserRound className="h-4 w-4 mr-2" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/settings')}>
+                  <Settings className="h-4 w-4 mr-2" />
+                  <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/banks')}>
+                  <Building className="h-4 w-4 mr-2" />
+                  <span>Banks</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/cards')}>
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  <span>Cards</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/budgets')}>
+                  <Calculator className="h-4 w-4 mr-2" />
+                  <span>Budgets</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/goals')}>
+                  <Target className="h-4 w-4 mr-2" />
+                  <span>Goals</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </nav>
       </div>

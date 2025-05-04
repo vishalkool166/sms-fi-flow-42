@@ -32,7 +32,10 @@ import AIInsightsPage from "@/pages/AIInsightsPage";
 import NotificationsPage from "@/pages/NotificationsPage";
 import SearchPage from "@/pages/SearchPage";
 import TransactionDetailPage from "@/pages/TransactionDetailPage";
+import TransactionsPage from "@/pages/TransactionsPage";
 import BillsPage from "@/pages/BillsPage";
+import AddBudgetPage from "@/pages/AddBudgetPage";
+import AddGoalPage from "@/pages/AddGoalPage";
 
 const queryClient = new QueryClient();
 
@@ -47,7 +50,7 @@ const App = () => (
             <Route path="/onboarding" element={<OnboardingPage />} />
             
             <Route element={<AppLayout />}>
-              <Route path="/" element={<DashboardPage />} />
+              <Route path="/" element={<HomePage />} />
               <Route path="/home" element={<HomePage />} />
               <Route path="/analytics" element={<EnhancedAnalyticsPage />} />
               <Route path="/insights" element={<FinancialInsightsPage />} />
@@ -55,6 +58,7 @@ const App = () => (
               <Route path="/add-transaction" element={<AddTransactionPage />} />
               <Route path="/edit-transaction/:id" element={<AddTransactionPage />} />
               <Route path="/transaction/:id" element={<TransactionDetailPage />} />
+              <Route path="/transactions" element={<TransactionsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/banks" element={<BanksPage />} />
@@ -62,7 +66,9 @@ const App = () => (
               <Route path="/loans" element={<LoansPage />} />
               <Route path="/debts" element={<DebtsPage />} />
               <Route path="/budgets" element={<BudgetsPage />} />
+              <Route path="/add-budget" element={<AddBudgetPage />} />
               <Route path="/goals" element={<GoalsPage />} />
+              <Route path="/add-goal" element={<AddGoalPage />} />
               <Route path="/accounts" element={<Navigate to="/banks" replace />} />
               <Route path="/ai-insights" element={<AIInsightsPage />} />
               <Route path="/notifications" element={<NotificationsPage />} />
