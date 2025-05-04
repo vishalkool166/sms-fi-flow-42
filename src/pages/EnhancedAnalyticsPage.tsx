@@ -16,9 +16,8 @@ import { motion } from 'framer-motion';
 const EnhancedAnalyticsPage = () => {
   const navigate = useNavigate();
   const [period, setPeriod] = useState('month');
-  const [chartType, setChartType] = useState('line');
+  const [chartType, setChartType] = useState<'line' | 'bar' | 'area'>('line');
   
-
   // Sample spending categories data
   const categoryData = [
     { name: 'Food', value: 4800, color: '#F97316' },
@@ -292,7 +291,7 @@ const EnhancedAnalyticsPage = () => {
             data={categoryData} 
             type="pie"
             lines={[
-              { dataKey: 'value', stroke: '#ffffff', fill: 'color' }
+              { dataKey: 'value', stroke: '#ffffff', fill: 'color', fillOpacity: 0.8 }
             ]}
             height={220}
           />

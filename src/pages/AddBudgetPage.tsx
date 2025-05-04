@@ -57,6 +57,18 @@ const categories: Category[] = [
   { id: 'misc', name: 'Miscellaneous', icon: Coffee, color: 'green' },
 ];
 
+// Create categoryIconMap for use in the component
+const categoryIconMap: Record<string, React.ElementType> = {
+  food: Utensils,
+  shopping: ShoppingBag,
+  transport: Car,
+  entertainment: Film,
+  utilities: Home,
+  health: HeartPulse,
+  education: GraduationCap,
+  misc: Coffee,
+};
+
 const AddBudgetPage: React.FC = () => {
   const navigate = useNavigate();
   const [name, setName] = useState('');

@@ -41,7 +41,8 @@ const EnhancedChart: React.FC<EnhancedChartProps> = ({
   showGrid = false,
   showTooltip = true,
   showXAxis = true,
-  showYAxis = true
+  showYAxis = true,
+  stacked = false
 }) => {
   if (type === 'area') {
     return (
