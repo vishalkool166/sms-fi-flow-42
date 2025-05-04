@@ -33,7 +33,8 @@ import {
   Coffee,
   Building,
   PieChart,
-  Calculator
+  Calculator,
+  LucideIcon
 } from 'lucide-react';
 import IconBox from '@/components/IconBox';
 import { toast } from '@/components/ui/use-toast';
@@ -42,7 +43,7 @@ import { motion } from 'framer-motion';
 interface Category {
   id: string;
   name: string;
-  icon: React.ElementType;
+  icon: LucideIcon;
   color: 'blue' | 'red' | 'green' | 'yellow' | 'purple' | 'teal' | 'orange' | 'pink';
 }
 
@@ -58,7 +59,7 @@ const categories: Category[] = [
 ];
 
 // Create categoryIconMap for use in the component
-const categoryIconMap: Record<string, React.ElementType> = {
+const categoryIconMap: Record<string, LucideIcon> = {
   food: Utensils,
   shopping: ShoppingBag,
   transport: Car,
