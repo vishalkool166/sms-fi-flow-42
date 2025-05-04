@@ -33,12 +33,12 @@
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 18% 12%;
     --card-foreground: 210 40% 98%;
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
     --primary: 199 89% 48%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
     --muted: 217.2 32.6% 17.5%;
@@ -59,24 +59,24 @@
   }
 
   body {
-    @apply bg-[#f8fafc] text-finance-dark font-sans;
+    @apply bg-[#f8fafc] text-finance-dark font-sans dark:bg-[#121212];
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   
   h1 {
-    @apply text-heading font-heading;
+    @apply text-heading font-heading dark:text-white;
   }
   
   h2 {
-    @apply text-subheading font-heading;
+    @apply text-subheading font-heading dark:text-gray-100;
   }
   
   h3, h4, h5, h6 {
-    @apply font-value;
+    @apply font-value dark:text-gray-100;
   }
   
   p {
-    @apply text-body;
+    @apply text-body dark:text-gray-300;
   }
   
   .font-sf-pro {
@@ -88,11 +88,11 @@
   }
   
   .premium-card {
-    @apply bg-white rounded-card shadow-premium p-6 hover:shadow-premium-hover transition-shadow;
+    @apply bg-white rounded-card shadow-premium p-6 hover:shadow-premium-hover transition-shadow dark:bg-[#1e2030] dark:shadow-dark-premium dark:hover:shadow-dark-premium-hover dark:border dark:border-gray-800;
   }
   
   .main-card {
-    @apply bg-white rounded-main-card shadow-premium p-7 hover:shadow-premium-hover transition-shadow;
+    @apply bg-white rounded-main-card shadow-premium p-7 hover:shadow-premium-hover transition-shadow dark:bg-[#1e2030] dark:shadow-dark-premium dark:hover:shadow-dark-premium-hover dark:border dark:border-gray-800;
   }
   
   .premium-gradient {
@@ -101,6 +101,10 @@
   
   .premium-text {
     @apply bg-gradient-to-r from-finance-navy to-finance-sky bg-clip-text text-transparent;
+  }
+
+  .dark .premium-text {
+    @apply bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent;
   }
   
   .icon-container {
@@ -116,15 +120,15 @@
   }
   
   .button-secondary {
-    @apply bg-white text-finance-dark font-value py-3 px-5 rounded-button shadow-card border border-gray-100 hover:shadow-premium transition-all hover:scale-[0.98] active:scale-95;
+    @apply bg-white text-finance-dark font-value py-3 px-5 rounded-button shadow-card border border-gray-100 hover:shadow-premium transition-all hover:scale-[0.98] active:scale-95 dark:bg-[#1e2030] dark:text-white dark:border-gray-800;
   }
   
   .button-outline {
-    @apply bg-transparent border border-gray-200 text-finance-dark font-value py-3 px-5 rounded-button hover:bg-gray-50 transition-all hover:scale-[0.98] active:scale-95;
+    @apply bg-transparent border border-gray-200 text-finance-dark font-value py-3 px-5 rounded-button hover:bg-gray-50 transition-all hover:scale-[0.98] active:scale-95 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-800;
   }
   
   .transaction-item {
-    @apply border-b border-gray-100 p-5 flex justify-between items-center hover:bg-gray-50 transition-colors;
+    @apply border-b border-gray-100 p-5 flex justify-between items-center hover:bg-gray-50 transition-colors dark:border-gray-800 dark:hover:bg-gray-800;
   }
   
   .category-badge {
@@ -132,11 +136,11 @@
   }
   
   .expense-amount {
-    @apply text-expense font-value;
+    @apply text-expense font-value dark:text-rose-400;
   }
   
   .income-amount {
-    @apply text-income font-value;
+    @apply text-income font-value dark:text-emerald-400;
   }
   
   .chart-container {
@@ -148,11 +152,11 @@
   }
   
   .stat-title {
-    @apply text-finance-medium text-caption mb-1 font-label;
+    @apply text-finance-medium text-caption mb-1 font-label dark:text-gray-400;
   }
   
   .stat-value {
-    @apply text-2xl font-value;
+    @apply text-2xl font-value dark:text-white;
   }
   
   .fab {
@@ -160,8 +164,12 @@
   }
   
   .pattern-overlay {
-    @apply absolute inset-0 opacity-10 mix-blend-overlay overflow-hidden;
+    @apply absolute inset-0 opacity-10 mix-blend-overlay overflow-hidden dark:opacity-15;
     background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .card-shimmer {
+    @apply bg-card-shimmer bg-[length:200%_100%] animate-card-shimmer dark:bg-dark-card-shimmer;
   }
 }
 
@@ -258,4 +266,45 @@
 
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Card Animations */
+.card-hover-effect {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.dark .card-hover-effect:hover {
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* 3D Card effect */
+.card-3d {
+  transition: transform 0.5s ease;
+  transform-style: preserve-3d;
+}
+
+.card-3d:hover {
+  transform: rotateY(5deg) rotateX(5deg);
+}
+
+/* Glow effect for dark mode */
+.dark .glow-effect {
+  box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+}
+
+.dark .glow-effect:hover {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
 }

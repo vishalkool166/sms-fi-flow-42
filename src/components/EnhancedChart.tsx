@@ -1,247 +1,190 @@
 
 import React from 'react';
 import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
   LineChart,
   Line,
+  BarChart,
+  Bar,
+  ComposedChart,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer,
-  Area,
-  AreaChart,
-  BarChart,
-  Bar,
   Legend,
-  ReferenceLine,
-  ComposedChart
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts';
 
-interface EnhancedChartProps {
-  data: Array<any>;
-  type: 'line' | 'area' | 'bar' | 'composed' | 'stacked';
-  height?: number | string;
-  lines?: Array<{
-    dataKey: string;
-    stroke: string;
-    strokeWidth?: number;
-    fill?: string;
-    fillOpacity?: number;
-  }>;
-  xAxisKey?: string;
+export interface EnhancedChartProps {
+  data: any[];
+  type: 'area' | 'line' | 'bar' | 'composed' | 'stacked' | 'pie';
+  lines: { dataKey: string; stroke: string; fill: string; fillOpacity: number }[];
+  height?: number;
+  showLegend?: boolean;
   showGrid?: boolean;
-  renderTooltip?: (props: any) => React.ReactNode;
-  yAxisFormatter?: (value: number) => string;
-  className?: string;
+  showTooltip?: boolean;
+  showXAxis?: boolean;
+  showYAxis?: boolean;
 }
 
 const EnhancedChart: React.FC<EnhancedChartProps> = ({
   data,
   type,
-  height = '100%',
-  lines = [{ dataKey: 'value', stroke: '#10B981', strokeWidth: 2 }],
-  xAxisKey = 'name',
-  showGrid = true,
-  renderTooltip,
-  yAxisFormatter = (value) => `₹${value}`,
-  className = ''
+  lines,
+  height = 300,
+  showLegend = false,
+  showGrid = false,
+  showTooltip = true,
+  showXAxis = true,
+  showYAxis = true
 }) => {
-  if (!data || data.length === 0) {
+  if (type === 'area') {
     return (
-      <div className="h-64 flex items-center justify-center bg-gray-50 rounded-lg">
-        <p className="text-gray-500">No data available</p>
-      </div>
+      <ResponsiveContainer width="100%" height={height}>
+        <AreaChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          {showXAxis && <XAxis dataKey="name" tickLine={false} axisLine={false} />}
+          {showYAxis && <YAxis tickLine={false} axisLine={false} />}
+          {showTooltip && <Tooltip />}
+          {showLegend && <Legend />}
+          {lines.map((line, index) => (
+            <Area
+              key={index}
+              type="monotone"
+              dataKey={line.dataKey}
+              stroke={line.stroke}
+              fill={line.fill}
+              fillOpacity={line.fillOpacity}
+            />
+          ))}
+        </AreaChart>
+      </ResponsiveContainer>
     );
   }
 
-  const renderChart = () => {
-    switch (type) {
-      case 'line':
-        return (
-          <LineChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />}
-            <XAxis 
-              dataKey={xAxisKey} 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
+  if (type === 'line') {
+    return (
+      <ResponsiveContainer width="100%" height={height}>
+        <LineChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          {showXAxis && <XAxis dataKey="name" tickLine={false} axisLine={false} />}
+          {showYAxis && <YAxis tickLine={false} axisLine={false} />}
+          {showTooltip && <Tooltip />}
+          {showLegend && <Legend />}
+          {lines.map((line, index) => (
+            <Line
+              key={index}
+              type="monotone"
+              dataKey={line.dataKey}
+              stroke={line.stroke}
             />
-            <YAxis 
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-              tickFormatter={yAxisFormatter}
+          ))}
+        </LineChart>
+      </ResponsiveContainer>
+    );
+  }
+
+  if (type === 'bar') {
+    return (
+      <ResponsiveContainer width="100%" height={height}>
+        <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          {showXAxis && <XAxis dataKey="name" tickLine={false} axisLine={false} />}
+          {showYAxis && <YAxis tickLine={false} axisLine={false} />}
+          {showTooltip && <Tooltip />}
+          {showLegend && <Legend />}
+          {lines.map((line, index) => (
+            <Bar
+              key={index}
+              dataKey={line.dataKey}
+              fill={line.fill}
+              fillOpacity={line.fillOpacity}
             />
-            <Tooltip content={renderTooltip} />
-            {lines.map((line, index) => (
-              <Line
-                key={index}
-                type="monotone"
-                dataKey={line.dataKey}
-                stroke={line.stroke}
-                strokeWidth={line.strokeWidth || 2}
-                dot={{ fill: line.stroke, strokeWidth: 2 }}
-                activeDot={{ r: 6 }}
-              />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+    );
+  }
+
+  if (type === 'stacked') {
+    return (
+      <ResponsiveContainer width="100%" height={height}>
+        <BarChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+          {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+          {showXAxis && <XAxis dataKey="name" tickLine={false} axisLine={false} />}
+          {showYAxis && <YAxis tickLine={false} axisLine={false} />}
+          {showTooltip && <Tooltip />}
+          {showLegend && <Legend />}
+          {lines.map((line, index) => (
+            <Bar
+              key={index}
+              dataKey={line.dataKey}
+              fill={line.fill}
+              fillOpacity={line.fillOpacity}
+              stackId="a"
+            />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+    );
+  }
+
+  if (type === 'pie') {
+    return (
+      <ResponsiveContainer width="100%" height={height}>
+        <PieChart margin={{ top: 0, right: 0, left: 0, bottom: 0 }}>
+          <Pie
+            data={data}
+            cx="50%"
+            cy="50%"
+            innerRadius={60}
+            outerRadius={80}
+            fill="#8884d8"
+            dataKey={lines[0].dataKey}
+            label
+          >
+            {data.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={lines[index % lines.length].fill} />
             ))}
-          </LineChart>
-        );
-      case 'area':
-        return (
-          <AreaChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />}
-            <XAxis 
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-              tickFormatter={yAxisFormatter}
-            />
-            <Tooltip content={renderTooltip} />
-            {lines.map((line, index) => (
+          </Pie>
+          {showTooltip && <Tooltip />}
+          {showLegend && <Legend />}
+        </PieChart>
+      </ResponsiveContainer>
+    );
+  }
+
+  return (
+    <ResponsiveContainer width="100%" height={height}>
+      <ComposedChart data={data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+        {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+        {showXAxis && <XAxis dataKey="name" tickLine={false} axisLine={false} />}
+        {showYAxis && <YAxis tickLine={false} axisLine={false} />}
+        {showTooltip && <Tooltip />}
+        {showLegend && <Legend />}
+        {lines.map((line, index) => {
+          if (index === 0) {
+            return (
               <Area
                 key={index}
                 type="monotone"
                 dataKey={line.dataKey}
                 stroke={line.stroke}
-                fill={line.fill || line.stroke}
-                fillOpacity={line.fillOpacity || 0.2}
-                strokeWidth={line.strokeWidth || 2}
+                fill={line.fill}
+                fillOpacity={line.fillOpacity}
               />
-            ))}
-          </AreaChart>
-        );
-      case 'bar':
-        return (
-          <BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />}
-            <XAxis
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-              tickFormatter={yAxisFormatter}
-            />
-            <Tooltip content={renderTooltip} />
-            {lines.map((line, index) => (
-              <Bar
-                key={index}
-                dataKey={line.dataKey}
-                fill={line.fill || line.stroke}
-                radius={[4, 4, 0, 0]}
-              />
-            ))}
-          </BarChart>
-        );
-      case 'composed':
-        return (
-          <ComposedChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />}
-            <XAxis
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-              tickFormatter={yAxisFormatter}
-            />
-            <Tooltip content={renderTooltip} />
-            <Legend wrapperStyle={{ paddingTop: 10 }} />
-            {lines.map((line, index) => {
-              if (index === 0) {
-                return (
-                  <Bar
-                    key={index}
-                    dataKey={line.dataKey}
-                    fill={line.fill || line.stroke}
-                    radius={[4, 4, 0, 0]}
-                  />
-                );
-              } else {
-                return (
-                  <Line
-                    key={index}
-                    type="monotone"
-                    dataKey={line.dataKey}
-                    stroke={line.stroke}
-                    strokeWidth={line.strokeWidth || 2}
-                    dot={{ fill: line.stroke, strokeWidth: 2 }}
-                  />
-                );
-              }
-            })}
-          </ComposedChart>
-        );
-      case 'stacked':
-        return (
-          <BarChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />}
-            <XAxis
-              dataKey={xAxisKey}
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-            />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fontSize: 12 }}
-              tickFormatter={yAxisFormatter}
-            />
-            <Tooltip content={renderTooltip} />
-            <Legend wrapperStyle={{ paddingTop: 10 }} />
-            {lines.map((line, index) => (
-              <Bar
-                key={index}
-                dataKey={line.dataKey}
-                fill={line.fill || line.stroke}
-                stackId="a"
-                radius={index === 0 ? [4, 4, 0, 0] : [0, 0, 0, 0]}
-              />
-            ))}
-          </BarChart>
-        );
-      default:
-        return (
-          <LineChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 10 }}>
-            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-            <XAxis dataKey={xAxisKey} />
-            <YAxis tickFormatter={yAxisFormatter} />
-            <Tooltip />
-            {lines.map((line, index) => (
-              <Line
-                key={index}
-                type="monotone"
-                dataKey={line.dataKey}
-                stroke={line.stroke}
-                strokeWidth={line.strokeWidth || 2}
-              />
-            ))}
-          </LineChart>
-        );
-    }
-  };
-
-  return (
-    <div className={`chart-container ${className}`} style={{ height }}>
-      <ResponsiveContainer width="100%" height="100%">
-        {renderChart()}
-      </ResponsiveContainer>
-    </div>
+            );
+          }
+          return (
+            <Line key={index} type="monotone" dataKey={line.dataKey} stroke={line.stroke} />
+          );
+        })}
+      </ComposedChart>
+    </ResponsiveContainer>
   );
 };
 

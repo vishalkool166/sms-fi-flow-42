@@ -10,14 +10,11 @@ import {
   ArrowDown, 
   ArrowUp, 
   MessageSquare, 
-  Edit, 
   UserRound,
   CreditCard,
   Building,
   Calculator,
   BarChart3,
-  Goal,
-  Users,
   Target,
   Bell,
   Search,
@@ -25,14 +22,16 @@ import {
   ChevronDown,
   MoreHorizontal,
   Wallet,
-  Award,
   HelpCircle,
-  LogOut
+  LogOut,
+  Moon,
+  Sun
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import IconBox from '@/components/IconBox';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useTheme } from '@/providers/ThemeProvider';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -45,12 +44,13 @@ const AppLayout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
+  const { theme, setTheme, isDark } = useTheme();
 
   const isActive = (path: string) => location.pathname === path;
 
   return (
-    <div className="flex flex-col h-screen bg-[#f8fafc] font-sf-pro relative">
-      <header className="bg-white p-4 shadow-sm flex justify-between items-center z-20">
+    <div className="flex flex-col h-screen bg-[#f8fafc] font-sf-pro relative dark:bg-[#121212]">
+      <header className="bg-white p-4 shadow-sm flex justify-between items-center z-20 dark:bg-[#1a1a2e] dark:border-b dark:border-gray-800">
         <div className="flex items-center">
           <div className="premium-gradient w-10 h-10 rounded-full flex items-center justify-center text-white">
             <MessageSquare className="h-5 w-5" />
@@ -62,9 +62,21 @@ const AppLayout: React.FC = () => {
             variant="ghost" 
             size="sm" 
             className="rounded-full mr-2 relative"
+            onClick={() => setTheme(isDark ? 'light' : 'dark')}
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5 text-yellow-400" />
+            ) : (
+              <Moon className="h-5 w-5 text-finance-dark" />
+            )}
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="rounded-full mr-2 relative"
             onClick={() => navigate('/notifications')}
           >
-            <Bell className="h-5 w-5 text-finance-dark" />
+            <Bell className="h-5 w-5 text-finance-dark dark:text-gray-300" />
             <Badge className="absolute -top-1 -right-1 w-4 h-4 p-0 flex items-center justify-center bg-red-500">3</Badge>
           </Button>
           <Button 
@@ -73,7 +85,7 @@ const AppLayout: React.FC = () => {
             className="rounded-full mr-4"
             onClick={() => navigate('/search')}
           >
-            <Search className="h-5 w-5 text-finance-dark" />
+            <Search className="h-5 w-5 text-finance-dark dark:text-gray-300" />
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -83,14 +95,14 @@ const AppLayout: React.FC = () => {
                 JD
               </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56 bg-white">
-              <div className="flex items-center p-3 border-b">
+            <DropdownMenuContent align="end" className="w-56 bg-white dark:bg-[#1e2030] dark:border-gray-700">
+              <div className="flex items-center p-3 border-b dark:border-gray-700">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-r from-finance-navy to-finance-sky flex items-center justify-center text-white font-bold mr-3">
                   JD
                 </div>
                 <div>
-                  <p className="font-semibold text-sm">John Doe</p>
-                  <p className="text-xs text-finance-medium">john.doe@example.com</p>
+                  <p className="font-semibold text-sm dark:text-white">John Doe</p>
+                  <p className="text-xs text-finance-medium dark:text-gray-400">john.doe@example.com</p>
                 </div>
               </div>
               <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
@@ -112,13 +124,28 @@ const AppLayout: React.FC = () => {
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate('/banks')} className="cursor-pointer">
                 <Building className="h-4 w-4 mr-2" />
-                <span>Banks & Cards</span>
+                <span>Banks</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/cards')} className="cursor-pointer">
+                <CreditCard className="h-4 w-4 mr-2" />
+                <span>Cards</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/loans')} className="cursor-pointer">
+                <Calculator className="h-4 w-4 mr-2" />
+                <span>Loans</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/debts')} className="cursor-pointer">
+                <Wallet className="h-4 w-4 mr-2" />
+                <span>Debts</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate('/budgets')} className="cursor-pointer">
+                <Calculator className="h-4 w-4 mr-2" />
+                <span>Budgets</span>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => navigate('/bills')} className="cursor-pointer">
                 <Calculator className="h-4 w-4 mr-2" />
-                <span>Bills & Payments</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+                <span>Bills</span>
+              </DropdownMenuSeparator>
               <DropdownMenuItem className="cursor-pointer">
                 <HelpCircle className="h-4 w-4 mr-2" />
                 <span>Help & Support</span>
@@ -140,18 +167,18 @@ const AppLayout: React.FC = () => {
         <AnimatePresence>
           {isAddMenuOpen && (
             <motion.div 
-              className="bg-white rounded-t-2xl shadow-premium p-5"
+              className="bg-white rounded-t-2xl shadow-premium p-5 dark:bg-[#1a1a2e] dark:shadow-dark-premium dark:border-t dark:border-gray-800"
               initial={{ y: 300 }}
               animate={{ y: 0 }}
               exit={{ y: 300 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
               <div className="flex justify-between items-center mb-4">
-                <h3 className="font-heading text-lg">Quick Actions</h3>
+                <h3 className="font-heading text-lg dark:text-white">Quick Actions</h3>
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="rounded-full text-finance-dark" 
+                  className="rounded-full text-finance-dark dark:text-gray-300" 
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <X className="h-5 w-5" />
@@ -160,78 +187,78 @@ const AppLayout: React.FC = () => {
               <div className="grid grid-cols-3 gap-4 mb-2">
                 <Link 
                   to="/add-transaction?type=expense" 
-                  className="flex flex-col items-center p-3 bg-red-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-red-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-red-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={ArrowDown} color="red" />
-                  <span className="text-caption mt-2 font-label">Expense</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Expense</span>
                 </Link>
                 <Link 
                   to="/add-transaction?type=income"
-                  className="flex flex-col items-center p-3 bg-green-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-green-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-green-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={ArrowUp} color="green" />
-                  <span className="text-caption mt-2 font-label">Income</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Income</span>
                 </Link>
                 <Link 
                   to="/scan-sms"
-                  className="flex flex-col items-center p-3 bg-blue-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-blue-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-blue-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={MessageSquare} color="blue" />
-                  <span className="text-caption mt-2 font-label">Scan SMS</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Scan SMS</span>
                 </Link>
                 <Link 
                   to="/banks"
-                  className="flex flex-col items-center p-3 bg-purple-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-purple-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-purple-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={Building} color="purple" />
-                  <span className="text-caption mt-2 font-label">Banks</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Banks</span>
                 </Link>
                 <Link 
                   to="/cards"
-                  className="flex flex-col items-center p-3 bg-yellow-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-yellow-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-yellow-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={CreditCard} color="yellow" />
-                  <span className="text-caption mt-2 font-label">Cards</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Cards</span>
                 </Link>
                 <Link 
                   to="/budgets"
-                  className="flex flex-col items-center p-3 bg-teal-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-teal-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-teal-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={Calculator} color="teal" />
-                  <span className="text-caption mt-2 font-label">Budget</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Budget</span>
                 </Link>
                 <Link 
                   to="/loans"
-                  className="flex flex-col items-center p-3 bg-orange-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-orange-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-orange-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={BarChart3} color="orange" />
-                  <span className="text-caption mt-2 font-label">Loans</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Loans</span>
                 </Link>
                 <Link 
                   to="/debts"
-                  className="flex flex-col items-center p-3 bg-indigo-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-indigo-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-indigo-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
-                  <IconBox icon={Users} color="indigo" />
-                  <span className="text-caption mt-2 font-label">Debts</span>
+                  <IconBox icon={Wallet} color="indigo" />
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Debts</span>
                 </Link>
                 <Link 
                   to="/goals"
-                  className="flex flex-col items-center p-3 bg-cyan-50 rounded-xl hover:scale-105 transition-transform duration-200"
+                  className="flex flex-col items-center p-3 bg-cyan-50 rounded-xl hover:scale-105 transition-transform duration-200 dark:bg-cyan-900/20"
                   onClick={() => setIsAddMenuOpen(false)}
                 >
                   <IconBox icon={Target} color="sky" />
-                  <span className="text-caption mt-2 font-label">Goals</span>
+                  <span className="text-caption mt-2 font-label dark:text-gray-300">Goals</span>
                 </Link>
               </div>
-              <div className="px-2 pt-3 border-t border-gray-100">
+              <div className="px-2 pt-3 border-t border-gray-100 dark:border-gray-700">
                 <Link
                   to="/ai-insights"
                   className="flex items-center justify-center p-2 bg-gradient-to-r from-finance-navy to-finance-sky text-white rounded-xl"
@@ -245,14 +272,14 @@ const AppLayout: React.FC = () => {
           )}
         </AnimatePresence>
         
-        <nav className="bg-white border-t border-gray-200 px-6 py-3 shadow-lg">
+        <nav className="bg-white border-t border-gray-200 px-6 py-3 shadow-lg dark:bg-[#1a1a2e] dark:border-gray-800">
           <div className="flex justify-around items-center relative">
-            <Link to="/" className={`flex flex-col items-center p-2 ${isActive('/') ? 'premium-text' : 'text-finance-medium'}`}>
+            <Link to="/" className={`flex flex-col items-center p-2 ${isActive('/') || isActive('/home') ? 'premium-text' : 'text-finance-medium dark:text-gray-400'}`}>
               <Home className="h-6 w-6" />
               <span className="text-xs mt-1 font-label">Home</span>
             </Link>
             
-            <Link to="/insights" className={`flex flex-col items-center p-2 ${isActive('/insights') ? 'premium-text' : 'text-finance-medium'}`}>
+            <Link to="/insights" className={`flex flex-col items-center p-2 ${isActive('/insights') ? 'premium-text' : 'text-finance-medium dark:text-gray-400'}`}>
               <PieChart className="h-6 w-6" />
               <span className="text-xs mt-1 font-label">Insights</span>
             </Link>
@@ -274,19 +301,23 @@ const AppLayout: React.FC = () => {
             
             <div className="w-12"></div> {/* Spacer */}
             
-            <Link to="/analytics" className={`flex flex-col items-center p-2 ${isActive('/analytics') ? 'premium-text' : 'text-finance-medium'}`}>
+            <Link to="/analytics" className={`flex flex-col items-center p-2 ${isActive('/analytics') ? 'premium-text' : 'text-finance-medium dark:text-gray-400'}`}>
               <BarChart3 className="h-6 w-6" />
               <span className="text-xs mt-1 font-label">Analytics</span>
             </Link>
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <div className={`flex flex-col items-center p-2 cursor-pointer ${isActive('/more') ? 'premium-text' : 'text-finance-medium'}`}>
+                <div className={`flex flex-col items-center p-2 cursor-pointer ${isActive('/more') ? 'premium-text' : 'text-finance-medium dark:text-gray-400'}`}>
                   <MoreHorizontal className="h-6 w-6" />
                   <span className="text-xs mt-1 font-label">More</span>
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-56 dark:bg-[#1e2030] dark:border-gray-700">
+                <DropdownMenuItem onClick={() => navigate('/dashboard')}>
+                  <Home className="h-4 w-4 mr-2" />
+                  <span>Dashboard</span>
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate('/profile')}>
                   <UserRound className="h-4 w-4 mr-2" />
                   <span>Profile</span>
@@ -294,6 +325,14 @@ const AppLayout: React.FC = () => {
                 <DropdownMenuItem onClick={() => navigate('/settings')}>
                   <Settings className="h-4 w-4 mr-2" />
                   <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/transactions')}>
+                  <Wallet className="h-4 w-4 mr-2" />
+                  <span>Transactions</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/scan-sms')}>
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  <span>Scan SMS</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => navigate('/banks')}>
@@ -311,6 +350,10 @@ const AppLayout: React.FC = () => {
                 <DropdownMenuItem onClick={() => navigate('/goals')}>
                   <Target className="h-4 w-4 mr-2" />
                   <span>Goals</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/ai-insights')}>
+                  <Zap className="h-4 w-4 mr-2" />
+                  <span>AI Insights</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
