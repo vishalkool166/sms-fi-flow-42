@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import AppLayout from "@/components/AppLayout";
 
 // Pages
+import LandingPage from "@/pages/LandingPage";
 import OnboardingPage from "@/pages/OnboardingPage";
 import HomePage from "@/pages/HomePage";
 import AnalyticsPage from "@/pages/AnalyticsPage";
@@ -54,6 +55,7 @@ const App = () => (
           <Sonner />
           <BrowserRouter>
             <Routes>
+              <Route path="/landing" element={<LandingPage />} />
               <Route path="/onboarding" element={<OnboardingPage />} />
               
               <Route element={<AppLayout />}>

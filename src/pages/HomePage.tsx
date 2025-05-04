@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { useApp } from '@/context/AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +5,7 @@ import PremiumCard from '@/components/PremiumCard';
 import PremiumTransactionItem from '@/components/PremiumTransactionItem';
 import PremiumProgress from '@/components/PremiumProgress';
 import { formatCurrency } from '@/utils/formatters';
+import SwipeableCards from '@/components/SwipeableCards';
 import { 
   ArrowRight, 
   Wallet, 
@@ -20,7 +20,8 @@ import {
   Utensils, 
   ShoppingBag, 
   Car,
-  Film
+  Film,
+  Search
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -34,6 +35,173 @@ const HomePage: React.FC = () => {
   
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const cardsRef = useRef<HTMLDivElement>(null);
+  
+  const cards = [
+    // Net Worth Card
+    <PremiumCard key="networth" variant="gradient" withPattern animated>
+      <div className="flex justify-between mb-2">
+        <h2 className="text-base font-medium opacity-90">Net Worth</h2>
+        <div className="flex">
+          <Button variant="ghost" size="sm" className="h-7 px-2 bg-white/20 text-white" onClick={() => navigate('/banks')}>
+            <Building className="h-4 w-4" />
+          </Button>
+          <Button variant="ghost" size="sm" className="h-7 px-2 bg-white/20 text-white ml-2" onClick={() => navigate('/cards')}>
+            <CreditCard className="h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+      <div className="text-3xl font-bold mb-5">{formatCurrency(totalBalance)}</div>
+      
+      <div className="grid grid-cols-2 gap-4">
+        <div className="bg-white/20 rounded-lg p-3">
+          <div className="flex items-center mb-1">
+            <ArrowRight className="h-4 w-4 mr-2 rotate-45" />
+            <span className="text-sm">Expenses</span>
+          </div>
+          <div className="text-lg font-medium">{formatCurrency(expenseTotal)}</div>
+        </div>
+        <div className="bg-white/20 rounded-lg p-3">
+          <div className="flex items-center mb-1">
+            <ArrowRight className="h-4 w-4 mr-2 -rotate-45" />
+            <span className="text-sm">Income</span>
+          </div>
+          <div className="text-lg font-medium">{formatCurrency(incomeTotal)}</div>
+        </div>
+      </div>
+    </PremiumCard>,
+    
+    // HDFC Bank Card
+    <motion.div
+      key="hdfc"
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="rounded-xl bg-gradient-to-br from-blue-700 to-blue-500 p-5 text-white shadow-lg h-[180px] flex flex-col justify-between card-3d"
+      whileHover={{ 
+        rotateY: 10, 
+        boxShadow: isDark ? '0 20px 25px rgba(0, 0, 0, 0.4)' : '0 20px 25px rgba(0, 0, 0, 0.2)'
+      }}
+    >
+      <div className="absolute top-0 left-0 w-full h-full opacity-10">
+        <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.3),_transparent_70%)]"></div>
+      </div>
+      
+      <div className="relative z-10 flex justify-between items-start">
+        <div>
+          <p className="text-white/80 text-sm">Bank</p>
+          <h3 className="text-xl font-semibold mt-1">HDFC Bank</h3>
+          <p className="text-sm mt-1">**** 5678</p>
+        </div>
+        <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center">
+          <Building className="h-6 w-6" />
+        </div>
+      </div>
+      <div className="relative z-10">
+        <p className="text-white/80 text-sm">Available Balance</p>
+        <h3 className="text-2xl font-bold mt-1">
+          {formatCurrency(24500)}
+        </h3>
+        <div className="flex justify-between items-center mt-2">
+          <span className="text-xs text-white/70">**** 5678</span>
+          <div className="flex space-x-1">
+            <div className="w-5 h-5 bg-white/30 rounded-full"></div>
+            <div className="w-5 h-5 bg-white/20 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bottom-0 right-0 p-4 opacity-5">
+        <Building className="h-32 w-32" />
+      </div>
+    </motion.div>,
+    
+    // Credit Card
+    <motion.div
+      key="creditcard"
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="rounded-xl bg-gradient-to-br from-purple-700 to-purple-500 p-5 text-white shadow-lg h-[180px] flex flex-col justify-between card-3d"
+      whileHover={{ 
+        rotateY: 10, 
+        boxShadow: isDark ? '0 20px 25px rgba(0, 0, 0, 0.4)' : '0 20px 25px rgba(0, 0, 0, 0.2)'
+      }}
+    >
+      <div className="absolute top-0 left-0 w-full h-full opacity-10">
+        <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.3),_transparent_70%)]"></div>
+      </div>
+      
+      <div className="relative z-10 flex justify-between items-start">
+        <div>
+          <p className="text-white/80 text-sm">Credit Card</p>
+          <h3 className="text-xl font-semibold mt-1">HDFC Credit Card</h3>
+          <p className="text-sm mt-1">**** 1234</p>
+        </div>
+        <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center">
+          <CreditCard className="h-6 w-6" />
+        </div>
+      </div>
+      <div className="relative z-10">
+        <p className="text-white/80 text-sm">Available Balance</p>
+        <h3 className="text-2xl font-bold mt-1">
+          {formatCurrency(-8450)}
+        </h3>
+        <div className="flex justify-between items-center mt-2">
+          <span className="text-xs text-white/70">Valid thru 12/25</span>
+          <div className="flex space-x-1">
+            <div className="w-5 h-5 bg-white/30 rounded-full"></div>
+            <div className="w-5 h-5 bg-white/20 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bottom-0 right-0 p-4 opacity-5">
+        <CreditCard className="h-32 w-32" />
+      </div>
+    </motion.div>,
+    
+    // SBI Bank Card
+    <motion.div
+      key="sbi"
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="rounded-xl bg-gradient-to-br from-teal-600 to-teal-400 p-5 text-white shadow-lg h-[180px] flex flex-col justify-between card-3d"
+      whileHover={{ 
+        rotateY: 10, 
+        boxShadow: isDark ? '0 20px 25px rgba(0, 0, 0, 0.4)' : '0 20px 25px rgba(0, 0, 0, 0.2)'
+      }}
+    >
+      <div className="absolute top-0 left-0 w-full h-full opacity-10">
+        <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.3),_transparent_70%)]"></div>
+      </div>
+      
+      <div className="relative z-10 flex justify-between items-start">
+        <div>
+          <p className="text-white/80 text-sm">Bank</p>
+          <h3 className="text-xl font-semibold mt-1">SBI Bank</h3>
+          <p className="text-sm mt-1">**** 9012</p>
+        </div>
+        <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center">
+          <Building className="h-6 w-6" />
+        </div>
+      </div>
+      <div className="relative z-10">
+        <p className="text-white/80 text-sm">Available Balance</p>
+        <h3 className="text-2xl font-bold mt-1">
+          {formatCurrency(18320)}
+        </h3>
+        <div className="flex justify-between items-center mt-2">
+          <span className="text-xs text-white/70">**** 9012</span>
+          <div className="flex space-x-1">
+            <div className="w-5 h-5 bg-white/30 rounded-full"></div>
+            <div className="w-5 h-5 bg-white/20 rounded-full"></div>
+          </div>
+        </div>
+      </div>
+      <div className="absolute bottom-0 right-0 p-4 opacity-5">
+        <Building className="h-32 w-32" />
+      </div>
+    </motion.div>
+  ];
   
   const bankCards = [
     { 
@@ -98,18 +266,10 @@ const HomePage: React.FC = () => {
     }
   };
   
-  const nextCard = () => {
-    if (currentCardIndex < bankCards.length - 1) {
-      setCurrentCardIndex(currentCardIndex + 1);
-    }
+  const handleCardChange = (index: number) => {
+    setCurrentCardIndex(index);
   };
   
-  const prevCard = () => {
-    if (currentCardIndex > 0) {
-      setCurrentCardIndex(currentCardIndex - 1);
-    }
-  };
-
   // Monthly overview data
   const savingsGoal = 25000;
   const currentSavings = 18320;
@@ -140,155 +300,22 @@ const HomePage: React.FC = () => {
             variant="ghost" 
             size="sm" 
             className="rounded-full ml-1"
-            onClick={() => navigate('/calendar')}
+            onClick={() => navigate('/search')}
           >
-            <Calendar className="h-5 w-5 dark:text-gray-300" />
+            <Search className="h-5 w-5 dark:text-gray-300" />
           </Button>
         </div>
       </div>
       
-      {/* Net Worth Card */}
-      <motion.div
-        className="mb-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
-      >
-        <PremiumCard variant="gradient" withPattern animated>
-          <div className="flex justify-between mb-2">
-            <h2 className="text-base font-medium opacity-90">Net Worth</h2>
-            <div className="flex">
-              <Button variant="ghost" size="sm" className="h-7 px-2 bg-white/20 text-white" onClick={() => navigate('/banks')}>
-                <Building className="h-4 w-4" />
-              </Button>
-              <Button variant="ghost" size="sm" className="h-7 px-2 bg-white/20 text-white ml-2" onClick={() => navigate('/cards')}>
-                <CreditCard className="h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-          <div className="text-3xl font-bold mb-5">{formatCurrency(totalBalance)}</div>
-          
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white/20 rounded-lg p-3">
-              <div className="flex items-center mb-1">
-                <ArrowRight className="h-4 w-4 mr-2 rotate-45" />
-                <span className="text-sm">Expenses</span>
-              </div>
-              <div className="text-lg font-medium">{formatCurrency(expenseTotal)}</div>
-            </div>
-            <div className="bg-white/20 rounded-lg p-3">
-              <div className="flex items-center mb-1">
-                <ArrowRight className="h-4 w-4 mr-2 -rotate-45" />
-                <span className="text-sm">Income</span>
-              </div>
-              <div className="text-lg font-medium">{formatCurrency(incomeTotal)}</div>
-            </div>
-          </div>
-        </PremiumCard>
-      </motion.div>
-      
-      {/* Card Carousel */}
-      <div className="relative mb-6">
-        <div className="overflow-hidden" ref={cardsRef}>
-          <div 
-            className="flex transition-transform duration-300 ease-out" 
-            style={{ transform: `translateX(-${currentCardIndex * 100}%)` }}
-          >
-            {bankCards.map((card, index) => (
-              <div key={card.id} className="w-full flex-shrink-0 px-1">
-                <motion.div
-                  initial={{ scale: 0.95, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                  className={`rounded-xl bg-gradient-to-br ${card.color} p-5 text-white shadow-lg h-[180px] flex flex-col justify-between card-3d`}
-                  whileHover={{ 
-                    rotateY: 10, 
-                    boxShadow: isDark ? '0 20px 25px rgba(0, 0, 0, 0.4)' : '0 20px 25px rgba(0, 0, 0, 0.2)'
-                  }}
-                >
-                  <div className="absolute top-0 left-0 w-full h-full opacity-10">
-                    <div className="h-full w-full bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.3),_transparent_70%)]"></div>
-                  </div>
-                  
-                  <div className="relative z-10 flex justify-between items-start">
-                    <div>
-                      <p className="text-white/80 text-sm">{card.type}</p>
-                      <h3 className="text-xl font-semibold mt-1">{card.name}</h3>
-                      <p className="text-sm mt-1">{card.number}</p>
-                    </div>
-                    <div className="h-10 w-10 bg-white/20 rounded-full flex items-center justify-center">
-                      {card.type === 'Bank' ? (
-                        <Building className="h-6 w-6" />
-                      ) : (
-                        <CreditCard className="h-6 w-6" />
-                      )}
-                    </div>
-                  </div>
-                  <div className="relative z-10">
-                    <p className="text-white/80 text-sm">Available Balance</p>
-                    <h3 className="text-2xl font-bold mt-1">
-                      {formatCurrency(card.balance)}
-                    </h3>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="text-xs text-white/70">
-                        {card.type === 'Bank' ? '**** 5678' : 'Valid thru 12/25'}
-                      </span>
-                      <div className="flex space-x-1">
-                        <div className="w-5 h-5 bg-white/30 rounded-full"></div>
-                        <div className="w-5 h-5 bg-white/20 rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute bottom-0 right-0 p-4 opacity-5">
-                    {card.type === 'Bank' 
-                      ? <Building className="h-32 w-32" /> 
-                      : <CreditCard className="h-32 w-32" />}
-                  </div>
-                </motion.div>
-              </div>
-            ))}
-          </div>
-        </div>
-        
-        {/* Pagination dots */}
-        <div className="flex justify-center mt-4">
-          {bankCards.map((_, index) => (
-            <button
-              key={index}
-              className={`h-2 mx-1 rounded-full transition-all ${
-                currentCardIndex === index ? "w-6 bg-finance-navy dark:bg-finance-sky" : "w-2 bg-gray-300 dark:bg-gray-700"
-              }`}
-              onClick={() => setCurrentCardIndex(index)}
-            />
-          ))}
-        </div>
-        
-        {/* Navigation buttons */}
-        {currentCardIndex > 0 && (
-          <motion.button 
-            className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center dark:bg-gray-800 dark:text-white"
-            onClick={prevCard}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </motion.button>
-        )}
-        
-        {currentCardIndex < bankCards.length - 1 && (
-          <motion.button 
-            className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow flex items-center justify-center dark:bg-gray-800 dark:text-white"
-            onClick={nextCard}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-          >
-            <ChevronRight className="h-5 w-5" />
-          </motion.button>
-        )}
+      {/* Swipeable Cards Section */}
+      <div className="mb-6">
+        <SwipeableCards onChangeIndex={handleCardChange}>
+          {cards}
+        </SwipeableCards>
       </div>
       
       {/* Monthly Overview */}
-      <PremiumCard className="mb-6 animated">
+      <PremiumCard className="mb-6" animated>
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold dark:text-white">Monthly Overview</h2>
           <span className="text-sm text-gray-500 dark:text-gray-400">May 2025</span>

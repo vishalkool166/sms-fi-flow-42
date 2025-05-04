@@ -23,9 +23,7 @@ import {
   MoreHorizontal,
   Wallet,
   HelpCircle,
-  LogOut,
-  Moon,
-  Sun
+  LogOut
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -44,7 +42,7 @@ const AppLayout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isAddMenuOpen, setIsAddMenuOpen] = useState(false);
-  const { theme, setTheme, isDark } = useTheme();
+  const { isDark } = useTheme();
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -58,18 +56,6 @@ const AppLayout: React.FC = () => {
           <h1 className="text-xl font-bold ml-2 premium-text">SMS-Fi Flow</h1>
         </div>
         <div className="flex items-center">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="rounded-full mr-2 relative"
-            onClick={() => setTheme(isDark ? 'light' : 'dark')}
-          >
-            {isDark ? (
-              <Sun className="h-5 w-5 text-yellow-400" />
-            ) : (
-              <Moon className="h-5 w-5 text-finance-dark" />
-            )}
-          </Button>
           <Button 
             variant="ghost" 
             size="sm" 
@@ -112,39 +98,6 @@ const AppLayout: React.FC = () => {
               <DropdownMenuItem onClick={() => navigate('/settings')} className="cursor-pointer">
                 <Settings className="h-4 w-4 mr-2" />
                 <span>Settings</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => navigate('/ai-insights')} className="cursor-pointer">
-                <Zap className="h-4 w-4 mr-2" />
-                <span>AI Insights</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/goals')} className="cursor-pointer">
-                <Target className="h-4 w-4 mr-2" />
-                <span>Goals</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/banks')} className="cursor-pointer">
-                <Building className="h-4 w-4 mr-2" />
-                <span>Banks</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/cards')} className="cursor-pointer">
-                <CreditCard className="h-4 w-4 mr-2" />
-                <span>Cards</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/loans')} className="cursor-pointer">
-                <Calculator className="h-4 w-4 mr-2" />
-                <span>Loans</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/debts')} className="cursor-pointer">
-                <Wallet className="h-4 w-4 mr-2" />
-                <span>Debts</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/budgets')} className="cursor-pointer">
-                <Calculator className="h-4 w-4 mr-2" />
-                <span>Budgets</span>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => navigate('/bills')} className="cursor-pointer">
-                <Calculator className="h-4 w-4 mr-2" />
-                <span>Bills</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
@@ -315,10 +268,6 @@ const AppLayout: React.FC = () => {
                 </div>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 dark:bg-[#1e2030] dark:border-gray-700">
-                <DropdownMenuItem onClick={() => navigate('/dashboard')}>
-                  <Home className="h-4 w-4 mr-2" />
-                  <span>Dashboard</span>
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate('/profile')}>
                   <UserRound className="h-4 w-4 mr-2" />
                   <span>Profile</span>
@@ -330,27 +279,6 @@ const AppLayout: React.FC = () => {
                 <DropdownMenuItem onClick={() => navigate('/transactions')}>
                   <Wallet className="h-4 w-4 mr-2" />
                   <span>Transactions</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/scan-sms')}>
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  <span>Scan SMS</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => navigate('/banks')}>
-                  <Building className="h-4 w-4 mr-2" />
-                  <span>Banks</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/cards')}>
-                  <CreditCard className="h-4 w-4 mr-2" />
-                  <span>Cards</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/budgets')}>
-                  <Calculator className="h-4 w-4 mr-2" />
-                  <span>Budgets</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate('/goals')}>
-                  <Target className="h-4 w-4 mr-2" />
-                  <span>Goals</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => navigate('/ai-insights')}>
                   <Zap className="h-4 w-4 mr-2" />
