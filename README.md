@@ -1,73 +1,114 @@
-# Welcome to your Lovable project
 
-## Project info
+# SMS-Fi Flow - SMS-Based Financial Tracking App
 
-**URL**: https://lovable.dev/projects/92bc4e61-e1cb-46b3-9fbb-517cbfc4f744
+SMS-Fi Flow is an innovative financial tracking application that automatically analyzes SMS messages to monitor and categorize your expenses, providing you with valuable insights into your spending habits and financial health.
 
-## How can I edit this code?
+## 🚀 Features
 
-There are several ways of editing your application.
+- **SMS Transaction Scanning**: Automatically extract and categorize financial transactions from SMS messages
+- **Expense Tracking**: Monitor your spending across different categories
+- **Financial Insights**: Get AI-powered insights about your spending habits
+- **Budget Management**: Create and track budgets to maintain financial discipline
+- **Goal Setting**: Set financial goals and track your progress
+- **Account Management**: Keep track of your bank accounts, cards, loans, and debts
+- **Visualized Analytics**: View your financial data through intuitive charts and graphs
 
-**Use Lovable**
+## 📱 Screenshots
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/92bc4e61-e1cb-46b3-9fbb-517cbfc4f744) and start prompting.
+*(Consider adding screenshots of your app here)*
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🔧 Technology Stack
 
-**Use your preferred IDE**
+- **Frontend**: React, TypeScript, Vite
+- **UI Components**: Tailwind CSS, Shadcn/UI
+- **State Management**: React Context, TanStack Query
+- **Animations**: Framer Motion
+- **Routing**: React Router Dom
+- **Data Visualization**: Recharts
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🏗️ Project Structure
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+The project follows a feature-based structure:
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```
+src/
+├── components/     # Reusable UI components
+├── pages/          # Application pages
+├── context/        # Context providers
+├── hooks/          # Custom React hooks
+├── models/         # TypeScript interfaces and types
+├── services/       # API and data services
+├── utils/          # Utility functions
+└── providers/      # Provider components
 ```
 
-**Edit a file directly in GitHub**
+## 🚀 Getting Started
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+### Prerequisites
 
-**Use GitHub Codespaces**
+- Node.js (v16 or later)
+- npm or yarn
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Installation
 
-## What technologies are used for this project?
+1. Clone the repository:
+   ```
+   git clone <repository-url>
+   ```
 
-This project is built with:
+2. Navigate to the project directory:
+   ```
+   cd sms-fi-flow
+   ```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+3. Install dependencies:
+   ```
+   npm install
+   ```
 
-## How can I deploy this project?
+4. Start the development server:
+   ```
+   npm run dev
+   ```
 
-Simply open [Lovable](https://lovable.dev/projects/92bc4e61-e1cb-46b3-9fbb-517cbfc4f744) and click on Share -> Publish.
+5. Open your browser and visit: `http://localhost:5173`
 
-## Can I connect a custom domain to my Lovable project?
+## 📋 Usage
 
-Yes, you can!
+1. **First Visit**: New users are guided through an onboarding process
+2. **SMS Scanning**: Grant permission to scan SMS messages for transaction details
+3. **Dashboard**: View your financial overview with recent transactions
+4. **Analytics**: Explore detailed financial analytics and insights
+5. **Budgets & Goals**: Set up budgets and financial goals
+6. **Account Management**: Add your bank accounts, cards, and loans
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🛠️ Development
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+### Available Scripts
+
+- `npm run dev`: Start development server
+- `npm run build`: Build for production
+- `npm run preview`: Preview production build locally
+
+## 🔜 Future Plans
+
+- **Offline Support**: Full functionality without internet connection
+- **Multi-language Support**: Internationalization for global users
+- **Advanced AI Insights**: More sophisticated financial advice
+- **Export Data**: Export financial data in various formats
+
+## 🔒 Privacy
+
+SMS-Fi Flow takes your privacy seriously. All SMS scanning happens locally on your device, and no message content is transmitted to external servers.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📝 License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## 📞 Contact
+
+For questions or feedback, please reach out at [your-email@example.com].
