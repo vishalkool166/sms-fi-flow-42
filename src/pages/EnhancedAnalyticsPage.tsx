@@ -200,8 +200,18 @@ const EnhancedAnalyticsPage = () => {
             data={data} 
             type={chartType}
             lines={[
-              { dataKey: 'income', stroke: '#10B981', fill: '#10B981', fillOpacity: 0.2 },
-              { dataKey: 'expense', stroke: '#F97316', fill: '#F97316', fillOpacity: 0.2 }
+              { 
+                dataKey: 'income', 
+                stroke: '#10B981', 
+                fill: '#10B981',
+                fillOpacity: 0.2 
+              },
+              { 
+                dataKey: 'expenses', 
+                stroke: '#EF4444', 
+                fill: '#EF4444',
+                fillOpacity: 0.2 
+              }
             ]}
             height={220}
           />

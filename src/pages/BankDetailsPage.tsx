@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft, Building, Plus, Bank, BarChart2, Download, Eye, EyeOff, MoreHorizontal, Trash2 } from 'lucide-react';
+import { ArrowLeft, Building, Plus, Ban as Bank, BarChart2, Download, Eye, EyeOff, MoreHorizontal, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import PremiumCard from '@/components/PremiumCard';
 import { formatCurrency } from '@/utils/formatters';

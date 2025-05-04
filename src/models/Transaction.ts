@@ -27,6 +27,7 @@ export interface Transaction {
   note?: string;
   tags?: string[];
   location?: string;
+  paymentMethod?: string; // Added this field
 }
 
 export const getCategoryColor = (category: CategoryType): string => {

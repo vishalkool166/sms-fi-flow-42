@@ -1,70 +1,71 @@
-
-import * as React from "react";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { cn } from '@/lib/utils';
+import { Progress } from '@/components/ui/progress';
+import { motion } from 'framer-motion';
 
 interface PremiumProgressProps {
   value: number;
-  max?: number;
-  className?: string;
-  indicatorClassName?: string;
-  size?: "sm" | "md" | "lg";
-  color?: "default" | "success" | "warning" | "danger" | "navy" | "sky";
+  color: 'blue' | 'green' | 'red' | 'yellow' | 'purple' | 'navy' | 'sky' | 'teal' | 'amber' | 'indigo' | 'pink' | 'orange' | 'gray';
   showLabel?: boolean;
-  label?: string;
   animated?: boolean;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-const PremiumProgress: React.FC<PremiumProgressProps> = ({
-  value,
-  max = 100,
+const PremiumProgress: React.FC<PremiumProgressProps> = ({ 
+  value, 
+  color = 'blue', 
+  showLabel = false, 
+  animated = false, 
   className,
-  indicatorClassName,
-  size = "md",
-  color = "default",
-  showLabel = false,
-  label,
-  animated = false,
+  size = 'md'
 }) => {
-  const percentage = Math.min(Math.max(0, (value / max) * 100), 100);
-  
-  const sizeStyles = {
-    sm: "h-1",
-    md: "h-2",
-    lg: "h-3",
+  const colorMap = {
+    blue: 'text-blue-600 dark:text-blue-400',
+    green: 'text-green-600 dark:text-green-400',
+    red: 'text-red-600 dark:text-red-400',
+    yellow: 'text-yellow-600 dark:text-yellow-400',
+    purple: 'text-purple-600 dark:text-purple-400',
+    navy: 'text-blue-900 dark:text-blue-200',
+    sky: 'text-sky-600 dark:text-sky-400',
+    teal: 'text-teal-600 dark:text-teal-400',
+    amber: 'text-amber-600 dark:text-amber-400',
+    indigo: 'text-indigo-600 dark:text-indigo-400',
+    pink: 'text-pink-600 dark:text-pink-400',
+    orange: 'text-orange-600 dark:text-orange-400',
+    gray: 'text-gray-600 dark:text-gray-400',
   };
   
-  const colorStyles = {
-    default: "bg-primary",
-    success: "bg-green-500",
-    warning: "bg-amber-500",
-    danger: "bg-red-500",
-    navy: "bg-finance-navy",
-    sky: "bg-finance-sky",
+  const sizeMap = {
+    sm: 'text-sm',
+    md: 'text-base',
+    lg: 'text-lg',
   };
   
-  const baseStyles = "w-full bg-gray-100 rounded-full overflow-hidden";
-  
-  return (
-    <div className="w-full">
-      {(showLabel || label) && (
-        <div className="flex justify-between mb-1 text-xs text-finance-medium">
-          <span>{label}</span>
-          {showLabel && <span>{Math.round(percentage)}%</span>}
-        </div>
+  const progressContent = (
+    <>
+      <Progress value={value} className={className} />
+      {showLabel && (
+        <p className={cn("mt-1 font-medium", sizeMap[size], colorMap[color])}>
+          {value}%
+        </p>
       )}
-      <div className={cn(baseStyles, sizeStyles[size], className)}>
-        <div
-          className={cn(
-            "h-full rounded-full transition-all",
-            colorStyles[color],
-            animated && "animate-pulse-soft",
-            indicatorClassName
-          )}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
+    </>
   );
+  
+  if (animated) {
+    return (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        {progressContent}
+      </motion.div>
+    );
+  }
+  
+  return <>{progressContent}</>;
 };
 
 export default PremiumProgress;

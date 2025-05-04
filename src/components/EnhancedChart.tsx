@@ -29,6 +29,7 @@ export interface EnhancedChartProps {
   showTooltip?: boolean;
   showXAxis?: boolean;
   showYAxis?: boolean;
+  stacked?: boolean; // Added this optional property
 }
 
 const EnhancedChart: React.FC<EnhancedChartProps> = ({

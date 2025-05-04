@@ -76,3 +76,8 @@ export const mapColorToType = (color: string): "blue" | "green" | "red" | "yello
   
   return validColors[color] || 'gray';
 };
+
+// Add this function for getTransactionIcon that was missing
+export const getTransactionIcon = (category: CategoryType): LucideIcon => {
+  return getCategoryIcon(category).icon;
+};

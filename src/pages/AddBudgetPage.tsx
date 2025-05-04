@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -31,7 +30,10 @@ import {
   HeartPulse, 
   GraduationCap, 
   Film, 
-  Coffee
+  Coffee,
+  Building,
+  PieChart,
+  Calculator
 } from 'lucide-react';
 import IconBox from '@/components/IconBox';
 import { toast } from '@/components/ui/use-toast';
@@ -149,7 +151,7 @@ const AddBudgetPage: React.FC = () => {
                       : 'hover:bg-gray-50'
                   }`}
                 >
-                  <IconBox icon={cat.icon} color={cat.color} size="sm" />
+                  <IconBox icon={categoryIconMap[cat.id]} color={cat.color} size="sm" />
                   <span className="text-xs mt-2 text-center">{cat.name}</span>
                 </div>
               ))}
