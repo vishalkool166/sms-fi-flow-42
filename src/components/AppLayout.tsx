@@ -145,7 +145,8 @@ const AppLayout: React.FC = () => {
               <DropdownMenuItem onClick={() => navigate('/bills')} className="cursor-pointer">
                 <Calculator className="h-4 w-4 mr-2" />
                 <span>Bills</span>
-              </DropdownMenuSeparator>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
                 <HelpCircle className="h-4 w-4 mr-2" />
                 <span>Help & Support</span>
